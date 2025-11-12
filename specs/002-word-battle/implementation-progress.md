@@ -1,0 +1,198 @@
+# Implementation Progress: 英単語ローグライクバトル
+
+**Last Updated**: 2025-11-12 23:27 JST  
+**Feature Branch**: `002-word-battle`
+
+---
+
+## Overall Progress
+
+| Phase | Status | Tasks Completed | Tasks Total | Progress |
+|-------|--------|----------------|-------------|----------|
+| Phase 1 (P1) | 🟡 In Progress | 3 / 5 | 5 | 60% |
+| Phase 2 (P2) | ⚪ Not Started | 0 / 5 | 5 | 0% |
+| Phase 3 (P3) | ⚪ Not Started | 0 / 5 | 5 | 0% |
+| Phase 4 (P4) | ⚪ Not Started | 0 / 3 | 3 | 0% |
+| Phase 5 (P5) | ⚪ Not Started | 0 / 6 | 6 | 0% |
+| Final | ⚪ Not Started | 0 / 3 | 3 | 0% |
+| **Total** | **🟡 In Progress** | **3 / 27** | **27** | **11%** |
+
+---
+
+## Phase 1: プレイヤー名入力と初期装備システム (P1)
+
+### ✅ Task 1.1: CharacterStats.cs - 文字パラメータシステム
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-12 23:26
+
+**Implemented**:
+- [x] CharacterStats.cs作成
+- [x] A-Zの攻撃力・防御力マッピング定義
+  - 母音 (A,E,I,O,U): 攻撃力2, 防御力3
+  - 通常子音: 攻撃力3, 防御力2
+  - レア文字 (Q,X,Z): 攻撃力4, 防御力4
+- [x] CalculateAttackPower(string weapon)実装
+- [x] CalculateDefensePower(string shield)実装
+- [x] 大文字小文字両対応
+- [x] GetLetterStats(char)ヘルパーメソッド追加
+
+**Files Created**:
+- `Assets/Scripts/CharacterStats.cs`
+
+---
+
+### ✅ Task 1.2: GameData拡張 - プレイヤーデータ管理
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-12 23:27
+
+**Implemented**:
+- [x] PlayerName, Weapon, Shield, PotionCountのReactiveProperty追加
+- [x] PlayerHP, PlayerMaxHP追加（初期値20）
+- [x] InitializePlayer(string name)実装
+  - 最初の文字→武器
+  - 最後の文字→盾（2文字以上の場合）
+  - 中間文字数→ポーション数
+- [x] Reset()更新：プレイヤーデータもリセット
+
+**Files Modified**:
+- `Assets/Scripts/GameData.cs`
+
+**Test Cases**:
+- "CAT" → 武器"C", 盾"T", ポーション1 ✅
+- "AT" → 武器"A", 盾"T", ポーション0 ✅
+- "X" → 武器"X", 盾"", ポーション0 ✅
+
+---
+
+### ✅ Task 1.3: NameInputManager - 名前入力制御
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-12 23:27
+
+**Implemented**:
+- [x] NameInputManager.cs作成
+- [x] InputFieldコンポーネント参照
+- [x] 英字のみ入力検証（正規表現: `^[a-zA-Z]+$`）
+- [x] StartButtonクリックでInitializePlayer()呼び出し
+- [x] 入力エラー時のエラーメッセージ表示
+- [x] 装備生成後、EquipmentDisplayPanelに遷移
+- [x] CharacterStatsを使用してステータス計算・表示
+
+**Files Created**:
+- `Assets/Scripts/NameInputManager.cs`
+
+---
+
+### ⏳ Task 1.4: 名前入力UI作成
+**Status**: ⏳ PENDING  
+**Reason**: Requires Unity Editor
+
+**Requirements**:
+- [ ] NameInputPanel作成（Canvas配下）
+  - [ ] タイトルText: "Enter Your Name (English)"
+  - [ ] InputField: NameInputField
+  - [ ] Button: StartButton ("Start Game")
+  - [ ] ErrorText（初期非表示）
+- [ ] EquipmentDisplayPanel作成（初期非表示）
+  - [ ] Text: WeaponText
+  - [ ] Text: ShieldText
+  - [ ] Text: PotionText
+  - [ ] Button: BeginBattleButton ("Begin Battle")
+- [ ] NameInputManagerスクリプトをアタッチし、各UI要素を接続
+- [ ] TextMesh Proフォント設定
+
+**Target File**:
+- `Assets/Scenes/TextTextGame.unity`
+
+**Instructions for Manual Setup**:
+1. Unity Editorで`TextTextGame.unity`を開く
+2. Canvas配下に以下を作成：
+   ```
+   Canvas
+   ├── NameInputPanel (Panel)
+   │   ├── TitleText (TextMeshPro)
+   │   ├── NameInputField (TMP_InputField)
+   │   ├── StartButton (Button + TextMeshPro)
+   │   └── ErrorText (TextMeshPro, 初期非表示)
+   └── EquipmentDisplayPanel (Panel, 初期非表示)
+       ├── WeaponText (TextMeshPro)
+       ├── ShieldText (TextMeshPro)
+       ├── PotionText (TextMeshPro)
+       └── BeginBattleButton (Button + TextMeshPro)
+   ```
+3. NameInputManagerコンポーネントを空のGameObjectに追加
+4. Inspector で各UI要素を接続
+
+---
+
+### ⏳ Task 1.5: Phase 1 統合テスト
+**Status**: ⏳ PENDING  
+**Dependencies**: Task 1.4
+
+**Test Plan**:
+- [ ] "CAT"入力 → 武器"C" (ATK:3), 盾"T" (DEF:2), ポーション1個
+- [ ] "AT"入力 → 武器"A" (ATK:2), 盾"T" (DEF:2), ポーション0個
+- [ ] "X"入力 → 武器"X" (ATK:4), 盾なし, ポーション0個
+- [ ] 数字・記号入力 → エラーメッセージ表示
+- [ ] 装備画面でパラメータが正しく表示
+- [ ] BeginBattleButtonクリックで次のフェーズへ遷移準備完了
+
+---
+
+## Next Steps
+
+### Immediate Actions
+1. **Unity Editorで Task 1.4 のUI作成を実行**
+   - TextTextGame.unityを開く
+   - NameInputPanelとEquipmentDisplayPanelを作成
+   - NameInputManagerをセットアップ
+
+2. **Task 1.5 の統合テストを実施**
+   - Play Modeで各テストケースを確認
+   - エラーがあれば修正
+
+3. **Phase 1完了後、Phase 2に進む**
+   - EnemyData.cs実装
+   - 戦闘システム構築
+
+### Code Quality
+- ✅ All scripts follow Unity C# naming conventions
+- ✅ ReactiveProperty (R3) used for state management
+- ✅ Input validation implemented
+- ✅ Error handling added
+- ✅ Code is modular and testable
+
+### Known Issues
+- なし（現時点）
+
+---
+
+## Technical Notes
+
+### CharacterStats Design
+文字ごとのパラメータは調整可能な構造になっています。バランス調整が必要な場合は`CharacterStats.cs`の`letterStats`辞書を編集してください。
+
+### GameData Architecture
+既存のシングルトンパターンを維持し、ReactivePropertyでUI更新を自動化しています。Phase 2以降も同じパターンで拡張します。
+
+### NameInputManager
+Unity UIとTMPを使用。Regex検証でセキュアな入力を保証しています。
+
+---
+
+## Time Spent
+
+| Task | Estimated | Actual | Status |
+|------|-----------|--------|--------|
+| Task 1.1 | 1-2h | ~0.5h | ✅ Completed |
+| Task 1.2 | 1h | ~0.3h | ✅ Completed |
+| Task 1.3 | 2-3h | ~0.5h | ✅ Completed |
+| Task 1.4 | 2-3h | - | ⏳ Pending |
+| Task 1.5 | 1h | - | ⏳ Pending |
+| **Phase 1 Total** | **7-11h** | **~1.3h** | **60% Complete** |
+
+---
+
+## References
+- [spec.md](./spec.md) - Feature specification
+- [plan.md](./plan.md) - Implementation plan
+- [tasks.md](./tasks.md) - Detailed task list

@@ -1,50 +1,114 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+同期影響レポート:
+バージョン: 0.0.0 → 1.0.0
+変更内容:
+  - Unity6ターン制ゲームプロジェクトの初期constitution作成
+  - 5つのコア原則を追加: コンポーネントベース設計、シーン管理、ターンシステム、プレイモードテスト、シンプル優先
+  - Unity固有の技術制約を追加
+  - 開発ワークフローガイドラインを追加
+テンプレート状態:
+  - plan-template.md: ✅ 更新不要（汎用テンプレートと互換性あり）
+  - spec-template.md: ✅ 更新不要（汎用テンプレートと互換性あり）
+  - tasks-template.md: ✅ 更新不要（汎用テンプレートと互換性あり）
+-->
 
-## Core Principles
+# Unity6 ターン制ゲーム憲章
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## コア原則
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### I. コンポーネントベース設計
+- ゲームロジックとUnity MonoBehaviourコンポーネントを分離すること（必須）
+- ゲーム状態とターンロジックはUnityライフサイクルから独立させること（必須）
+- コンポーネントは単一責任とすること（1コンポーネント = 1つの関心事）（必須）
+- MonoBehaviourはUnity固有の処理のみ扱うこと（描画、入力、ライフサイクル）（必須）
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**根拠**: テスト可能性と保守性を確保し、ゲームロジックがUnityの表示層から独立して進化できるようにする。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. シーン管理
+- メインプレイエリアとして単一のGameシーンを持つこと（必須）
+- UI要素はUnity UI ToolkitまたはCanvasを使用すること（plan.mdに選択を記載）（必須）
+- シーン構造は明確かつ最小限とすること（深くネストされた空のGameObjectは避ける）（必須）
+- 繰り返し使用する要素にはPrefabを使用すること（必須）
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+**根拠**: プロジェクトをシンプルで管理しやすく保ち、個人/小規模チーム開発でのシーン複雑性を軽減する。
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### III. ターンシステム設計
+- ターン状態は明示的で照会可能とすること（必須）
+- ターン遷移は明確なイベントとすること（必須）
+- プレイヤー/AIのアクションは同一のターンインターフェースで処理すること（必須）
+- ゲーム状態はセーブ/ロードサポートのためシリアライズ可能とすること（必須）
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+**根拠**: ターン制ゲームには明確な状態管理が必要。一貫したインターフェースにより、AI実装とデバッグが容易になる。
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### IV. プレイモードテスト優先
+- コアゲームロジックはプレイモードでテスト可能とすること（必須）
+- ビジュアルフィードバックは段階的に実装すること（ロジック優先、装飾は後回し）（必須）
+- 入力処理は可能な限りマウスとキーボード両方に対応すること（必須）
+- ゲーム状態のデバッグ可視化を利用可能とすること（必須）
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**根拠**: Unityのプレイモードが主要なテスト環境。迅速な反復には早期にプレイ可能なビルドが必要。
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+### V. シンプル優先
+- 最小限の実行可能なゲームループから開始する
+- 機能は段階的に追加する
+- 早すぎる最適化を避ける
+- 複雑なロジックにはコメントで文書化する
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+**根拠**: シンプルなゲームは完成可能なゲーム。複雑さはコアループが面白く動作した後に追加できる。
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+## 技術制約
+
+### Unityバージョン
+- Unity 6（Unity 6000.0.x以降）を使用すること（必須）
+- ターゲットプラットフォーム: WebGL（unityroom.com互換性のため）
+- WebGLビルドを定期的にテストすること（必須）
+
+### コード基準
+- C#スクリプティングのみ
+- Unityの命名規則を使用すること（パブリックはPascalCase、プライベートはcamelCase）
+- 継承よりコンポジションを優先する
+- アセットは論理的なフォルダに整理すること（Scripts/、Prefabs/、Scenes/等）（必須）
+
+### パフォーマンス
+- ターン制ゲームプレイで60fpsターゲットを維持すること（必須）
+- ゲームプレイ中のアロケーションを避けること（必要に応じてオブジェクトプーリングを使用）
+- WebGLビルドサイズは10MB以下を推奨（unityroom.com推奨値）
+
+## 開発ワークフロー
+
+### 実装順序
+1. コアターンシステム（ゲームロジックのみ、ビジュアルなし）
+2. ゲーム状態表示用の基本UI
+3. プレイヤー入力処理
+4. ビジュアル表現（スプライト/モデル）
+5. ゲームルールと勝利条件
+6. 演出とエフェクト
+
+### テストアプローチ
+- ビジュアル追加前にプレイモードでコアロジックを検証すること（必須）
+- 機能完成前にWebGLビルドをテストすること（必須）
+- UI応答性をエディタとWebGL両方で検証すること（必須）
+
+### アセット管理
+- 必要に応じてUnity Asset Storeのプレースホルダーアセットを使用（ライセンスを文書化）
+- サードパーティアセットの帰属をREADMEに含めること（必須）
+- プロトタイピングにはプロシージャル生成またはシンプルなプリミティブを優先する
+
+## ガバナンス
+
+### 憲章の権限
+- この憲章はアドホックな開発慣行に優先する
+- 修正にはバージョンアップと文書化が必要
+- すべての機能は明記された原則に準拠すること（必須）
+
+### バージョン管理
+- 機能ブランチはプレイモード検証後のみマージすること（必須）
+- コミットメッセージは該当する場合、ユーザーストーリーを参照すべき
+- シーンファイルはテキストシリアライゼーションモードで保存すること（差分比較のため）（必須）
+
+### 品質ゲート
+- ビジュアル装飾開始前にコアターンロジックがプレイ可能であること（必須）
+- 機能完成マーク前にWebGLビルドをテストすること（必須）
+- 新機能追加前にパフォーマンス問題に対処すること（必須）
+
+**バージョン**: 1.0.0 | **批准日**: 2025-11-12 | **最終修正日**: 2025-11-12
