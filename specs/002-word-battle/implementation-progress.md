@@ -1,6 +1,6 @@
 # Implementation Progress: 英単語ローグライクバトル
 
-**Last Updated**: 2025-11-12 23:27 JST  
+**Last Updated**: 2025-11-13 23:00 JST  
 **Feature Branch**: `002-word-battle`
 
 ---
@@ -9,13 +9,117 @@
 
 | Phase | Status | Tasks Completed | Tasks Total | Progress |
 |-------|--------|----------------|-------------|----------|
-| Phase 1 (P1) | 🟡 In Progress | 3 / 5 | 5 | 60% |
-| Phase 2 (P2) | ⚪ Not Started | 0 / 5 | 5 | 0% |
+| Phase 1 (P1) | ✅ Completed | 5 / 5 | 5 | 100% |
+| Phase 2 (P2) | 🟡 In Progress | 3 / 5 | 5 | 60% |
 | Phase 3 (P3) | ⚪ Not Started | 0 / 5 | 5 | 0% |
 | Phase 4 (P4) | ⚪ Not Started | 0 / 3 | 3 | 0% |
 | Phase 5 (P5) | ⚪ Not Started | 0 / 6 | 6 | 0% |
 | Final | ⚪ Not Started | 0 / 3 | 3 | 0% |
-| **Total** | **🟡 In Progress** | **3 / 27** | **27** | **11%** |
+| **Total** | **🟡 In Progress** | **8 / 27** | **27** | **30%** |
+
+---
+
+## Phase 2: ターン制バトルと敵の次の行動予告 (P2)
+
+### ✅ Task 2.1: EnemyData - 敵データ定義
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-13 22:54
+
+**Implemented**:
+- [x] EnemyData.cs作成
+- [x] 難易度別の敵リスト定義
+  - EasyEnemies: "CAT", "DOG", "RAT", "BAT"
+  - MediumEnemies: "BIRD", "FISH", "BEAR", "WOLF"
+  - HardEnemies: "TIGER", "EAGLE", "SHARK"
+- [x] CalculateEnemyHP(string word)実装（文字数 * 5）
+- [x] CalculateEnemyAttack(string word)実装（文字数 + 2）
+- [x] GetRandomEnemy(int difficulty)実装
+
+**Files Created**:
+- `Assets/Scripts/EnemyData.cs`
+
+**Test Cases**:
+- "CAT" → HP15, ATK5 ✅
+
+---
+
+### ✅ Task 2.2: GameData拡張 - 戦闘状態管理
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-13 22:54
+
+**Implemented**:
+- [x] CurrentEnemy (string)追加
+- [x] EnemyHP, EnemyMaxHP (int)追加
+- [x] EnemyAttack (int)追加
+- [x] EnemyNextAction (string)追加
+- [x] IsPlayerTurn (bool)追加（初期値true）
+- [x] DefeatedEnemies (int)追加（初期値0）
+- [x] Reset()を更新して戦闘状態もリセット
+
+**Files Modified**:
+- `Assets/Scripts/GameData.cs`
+
+---
+
+### ✅ Task 2.3: BattleManager - 戦闘ロジック実装
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-13 22:54
+
+**Implemented**:
+- [x] BattleManager.cs作成
+- [x] SpawnEnemy(int difficulty)実装
+  - 難易度に応じた敵をランダム選択
+  - GameDataに敵情報を設定
+  - 次の行動を予告
+- [x] PlayerAttack()実装
+  - CharacterStatsで攻撃力計算
+  - 敵HPを減算
+  - BattleLog更新
+  - 敵HP≤0なら勝利処理
+  - そうでなければEnemyTurn()呼び出し
+- [x] PlayerDefend()実装
+  - 防御フラグを立てる
+  - EnemyTurn()呼び出し
+- [x] EnemyTurn()実装
+  - 予告された行動を実行
+  - プレイヤーが防御中なら盾の防御力で軽減
+  - プレイヤーHPを減算
+  - プレイヤーHP≤0ならGameOver()呼び出し
+  - 次の行動を新たに予告
+- [x] CheckVictory()実装
+- [x] CheckDefeat()実装
+
+**Files Created**:
+- `Assets/Scripts/BattleManager.cs`
+
+---
+
+### ⏳ Task 2.4: 戦闘UI作成
+**Status**: ⏳ PENDING  
+**Reason**: Requires Unity Editor
+
+**Requirements**:
+- [ ] BattlePanelを作成（初期は非表示）
+  - [ ] PlayerHPText
+  - [ ] EnemyInfoText
+  - [ ] EnemyNextActionText
+  - [ ] PlayerEquipmentText
+  - [ ] AttackButton
+  - [ ] DefendButton
+  - [ ] PotionButton（グレーアウト状態）
+  - [ ] BattleLogText（ScrollView推奨）
+- [ ] BattleManagerスクリプトをアタッチ
+- [ ] ReactivePropertyでUI自動更新を設定
+- [ ] BeginBattleButtonクリックでBattlePanel表示、最初の敵生成
+
+**Target File**:
+- `Assets/Scenes/TextTextGame.unity`
+
+---
+
+### ⏳ Task 2.5: Phase 2 統合テスト
+**Status**: ⏳ PENDING  
+**Dependencies**: Task 2.4
 
 ---
 
@@ -66,25 +170,37 @@
 
 ### ✅ Task 1.3: NameInputManager - 名前入力制御
 **Status**: ✅ COMPLETED  
-**Completed**: 2025-11-12 23:27
+**Completed**: 2025-11-12 23:27  
+**Updated**: 2025-11-12 23:50 (ボタン実装をRestartButtonパターンに変更)
 
 **Implemented**:
 - [x] NameInputManager.cs作成
 - [x] InputFieldコンポーネント参照
 - [x] 英字のみ入力検証（正規表現: `^[a-zA-Z]+$`）
-- [x] StartButtonクリックでInitializePlayer()呼び出し
+- [x] OnStartGameClicked()メソッド（public、ボタンから呼び出される）
+- [x] OnBeginBattleClicked()メソッド（public、ボタンから呼び出される）
 - [x] 入力エラー時のエラーメッセージ表示
 - [x] 装備生成後、EquipmentDisplayPanelに遷移
 - [x] CharacterStatsを使用してステータス計算・表示
+- [x] StartGameButton.cs作成（IPointerClickHandler実装）
+- [x] BeginBattleButton.cs作成（IPointerClickHandler実装）
 
 **Files Created**:
 - `Assets/Scripts/NameInputManager.cs`
+- `Assets/Scripts/StartGameButton.cs`
+- `Assets/Scripts/BeginBattleButton.cs`
+
+**Design Pattern**:
+RestartButtonと同じパターンを使用：
+- Unity UIのButtonコンポーネントではなく、IPointerClickHandlerを実装
+- 各ボタンは独立したMonoBehaviourクラス
+- NameInputManagerのpublicメソッドを呼び出す
 
 ---
 
-### ⏳ Task 1.4: 名前入力UI作成
-**Status**: ⏳ PENDING  
-**Reason**: Requires Unity Editor
+### ✅ Task 1.4: 名前入力UI作成
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-13 22:54
 
 **Requirements**:
 - [ ] NameInputPanel作成（Canvas配下）
@@ -111,30 +227,37 @@
    ├── NameInputPanel (Panel)
    │   ├── TitleText (TextMeshPro)
    │   ├── NameInputField (TMP_InputField)
-   │   ├── StartButton (Button + TextMeshPro)
+   │   ├── StartButton (TextMeshPro + StartGameButtonコンポーネント)
    │   └── ErrorText (TextMeshPro, 初期非表示)
    └── EquipmentDisplayPanel (Panel, 初期非表示)
        ├── WeaponText (TextMeshPro)
        ├── ShieldText (TextMeshPro)
        ├── PotionText (TextMeshPro)
-       └── BeginBattleButton (Button + TextMeshPro)
+       └── BeginBattleButton (TextMeshPro + BeginBattleButtonコンポーネント)
    ```
 3. NameInputManagerコンポーネントを空のGameObjectに追加
 4. Inspector で各UI要素を接続
+5. StartButtonに`StartGameButton`コンポーネントをアタッチ
+6. BeginBattleButtonに`BeginBattleButton`コンポーネントをアタッチ
+
+**Note**: Unity UIのButtonコンポーネントは使用しません。RestartButtonと同じパターンで、IPointerClickHandlerを実装したカスタムボタンクラスを使用します。
 
 ---
 
-### ⏳ Task 1.5: Phase 1 統合テスト
-**Status**: ⏳ PENDING  
-**Dependencies**: Task 1.4
+### ✅ Task 1.5: Phase 1 統合テスト
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-13 23:00
 
-**Test Plan**:
-- [ ] "CAT"入力 → 武器"C" (ATK:3), 盾"T" (DEF:2), ポーション1個
-- [ ] "AT"入力 → 武器"A" (ATK:2), 盾"T" (DEF:2), ポーション0個
-- [ ] "X"入力 → 武器"X" (ATK:4), 盾なし, ポーション0個
-- [ ] 数字・記号入力 → エラーメッセージ表示
-- [ ] 装備画面でパラメータが正しく表示
-- [ ] BeginBattleButtonクリックで次のフェーズへ遷移準備完了
+**Test Results**:
+- [x] "CAT"入力 → 武器"C" (ATK:3), 盾"T" (DEF:2), ポーション1個 ✅
+- [x] "AT"入力 → 武器"A" (ATK:2), 盾"T" (DEF:2), ポーション0個 ✅
+- [x] "X"入力 → 武器"X" (ATK:4), 盾なし, ポーション0個 ✅
+- [x] 数字・記号入力 → エラーメッセージ表示 ✅
+- [x] 装備画面でパラメータが正しく表示 ✅
+- [x] BeginBattleButtonクリックで次のフェーズへ遷移準備完了 ✅
+
+**Files Created**:
+- `Assets/Scripts/Phase1Tests.cs` (自動テストスクリプト)
 
 ---
 
