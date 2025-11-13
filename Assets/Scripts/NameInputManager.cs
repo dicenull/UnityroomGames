@@ -15,6 +15,9 @@ public class NameInputManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI shieldText;
     [SerializeField] private TextMeshProUGUI potionText;
 
+    [Header("Battle Manager")]
+    [SerializeField] private BattleManager battleManager;
+
     private void Start()
     {
         nameInputPanel.SetActive(true);
@@ -84,5 +87,14 @@ public class NameInputManager : MonoBehaviour
     public void OnBeginBattleClicked()
     {
         equipmentDisplayPanel.SetActive(false);
+        
+        if (battleManager != null)
+        {
+            battleManager.StartBattle();
+        }
+        else
+        {
+            Debug.LogError("BattleManager is not assigned in NameInputManager!");
+        }
     }
 }

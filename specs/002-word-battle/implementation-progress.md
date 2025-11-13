@@ -10,12 +10,12 @@
 | Phase | Status | Tasks Completed | Tasks Total | Progress |
 |-------|--------|----------------|-------------|----------|
 | Phase 1 (P1) | ✅ Completed | 5 / 5 | 5 | 100% |
-| Phase 2 (P2) | 🟡 In Progress | 3 / 5 | 5 | 60% |
+| Phase 2 (P2) | 🟡 In Progress | 4 / 5 | 5 | 80% |
 | Phase 3 (P3) | ⚪ Not Started | 0 / 5 | 5 | 0% |
 | Phase 4 (P4) | ⚪ Not Started | 0 / 3 | 3 | 0% |
 | Phase 5 (P5) | ⚪ Not Started | 0 / 6 | 6 | 0% |
 | Final | ⚪ Not Started | 0 / 3 | 3 | 0% |
-| **Total** | **🟡 In Progress** | **8 / 27** | **27** | **30%** |
+| **Total** | **🟡 In Progress** | **9 / 27** | **27** | **33%** |
 
 ---
 
@@ -94,32 +94,53 @@
 
 ---
 
-### ⏳ Task 2.4: 戦闘UI作成
-**Status**: ⏳ PENDING  
-**Reason**: Requires Unity Editor
+### ✅ Task 2.4: 戦闘UI作成
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-14 08:53
 
-**Requirements**:
-- [ ] BattlePanelを作成（初期は非表示）
-  - [ ] PlayerHPText
-  - [ ] EnemyInfoText
-  - [ ] EnemyNextActionText
-  - [ ] PlayerEquipmentText
-  - [ ] AttackButton
-  - [ ] DefendButton
-  - [ ] PotionButton（グレーアウト状態）
-  - [ ] BattleLogText（ScrollView推奨）
-- [ ] BattleManagerスクリプトをアタッチ
-- [ ] ReactivePropertyでUI自動更新を設定
-- [ ] BeginBattleButtonクリックでBattlePanel表示、最初の敵生成
+**Implemented**:
+- [x] BattlePanel作成（初期非表示）
+  - [x] PlayerHPText
+  - [x] EnemyInfoText
+  - [x] EnemyNextActionText
+  - [x] PlayerEquipmentText
+  - [x] AttackButton
+  - [x] DefendButton
+  - [x] PotionButton（グレーアウト状態）
+  - [x] BattleLogText（ScrollView）
+- [x] BattleManagerスクリプトをアタッチし、各UI要素を接続
+- [x] ReactivePropertyでUI自動更新を設定
+- [x] BeginBattleButtonクリックでBattlePanel表示、最初の敵生成
+- [x] AttackButton.cs、DefendButton.cs、PotionButton.cs作成
+- [x] NameInputManagerにBattleManager参照を追加
 
-**Target File**:
-- `Assets/Scenes/TextTextGame.unity`
+**Files Modified**:
+- `Assets/Scripts/BattleManager.cs` (UI連携とReactiveProperty追加)
+- `Assets/Scripts/NameInputManager.cs` (BattleManager参照追加)
+- `Assets/Scenes/TextTextGame.unity` (BattlePanel追加)
+
+**Files Created**:
+- `Assets/Scripts/AttackButton.cs`
+- `Assets/Scripts/DefendButton.cs`
+- `Assets/Scripts/PotionButton.cs`
 
 ---
 
 ### ⏳ Task 2.5: Phase 2 統合テスト
 **Status**: ⏳ PENDING  
 **Dependencies**: Task 2.4
+
+**Test Plan**:
+- [ ] 戦闘開始時に敵が正しく生成される（名前、HP、攻撃力）
+- [ ] 敵の次の行動が予告表示される
+- [ ] Attackボタン → 敵HPが減少、BattleLogに結果表示
+- [ ] Defendボタン → 敵の攻撃が軽減される
+- [ ] 敵を倒す → 新しい敵が生成される
+- [ ] プレイヤーHP≤0 → GameOverCanvas表示
+- [ ] ターン交互に進行する
+
+**Files Created**:
+- `Assets/Scripts/Phase2Tests.cs` (自動テストスクリプト)
 
 ---
 

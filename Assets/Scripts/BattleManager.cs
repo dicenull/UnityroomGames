@@ -1,11 +1,21 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using System.Collections;
+using R3;
 
 public class BattleManager : MonoBehaviour
 {
     [Header("UI References")]
+    [SerializeField] private GameObject battlePanel;
+    [SerializeField] private TMP_Text playerHPText;
+    [SerializeField] private TMP_Text enemyInfoText;
+    [SerializeField] private TMP_Text enemyNextActionText;
+    [SerializeField] private TMP_Text playerEquipmentText;
     [SerializeField] private TMP_Text battleLogText;
+    [SerializeField] private Button attackButton;
+    [SerializeField] private Button defendButton;
+    [SerializeField] private Button potionButton;
 
     private GameData gameData;
     private bool isDefending = false;
@@ -13,6 +23,103 @@ public class BattleManager : MonoBehaviour
     void Start()
     {
         gameData = GameData.Instance;
+        SetupUIBindings();
+    }
+
+    /// <summary>
+    /// ReactivePropertyとUIの連携を設定
+    /// </summary>
+    private void SetupUIBindings()
+    {
+        if (gameData == null) return;
+
+        // プレイヤーHP表示
+        gameData.PlayerHP.Subscribe(hp =>
+        {
+            if (playerHPText != null)
+                playerHPText.text = $"HP: {hp}/{gameData.PlayerMaxHP.Value}";
+        }).AddTo(this);
+
+        // 敵情報表示
+        gameData.CurrentEnemy.Subscribe(enemy =>
+        {
+            if (enemyInfoText != null && !string.IsNullOrEmpty(enemy))
+                UpdateEnemyInfo();
+        }).AddTo(this);
+
+        gameData.EnemyHP.Subscribe(_ =>
+        {
+            if (enemyInfoText != null)
+                UpdateEnemyInfo();
+        }).AddTo(this);
+
+        // 敵の次の行動表示
+        gameData.EnemyNextAction.Subscribe(action =>
+        {
+            if (enemyNextActionText != null)
+                enemyNextActionText.text = $"Next: {action}";
+        }).AddTo(this);
+
+        // 装備情報表示
+        gameData.Weapon.Subscribe(_ => UpdateEquipmentInfo()).AddTo(this);
+        gameData.Shield.Subscribe(_ => UpdateEquipmentInfo()).AddTo(this);
+
+        // ターン管理によるボタン制御
+        gameData.IsPlayerTurn.Subscribe(isPlayerTurn =>
+        {
+            if (attackButton != null) attackButton.interactable = isPlayerTurn;
+            if (defendButton != null) defendButton.interactable = isPlayerTurn;
+            if (potionButton != null) potionButton.interactable = isPlayerTurn && gameData.PotionCount.Value > 0;
+        }).AddTo(this);
+
+        // ポーション数によるボタン制御
+        gameData.PotionCount.Subscribe(count =>
+        {
+            if (potionButton != null)
+            {
+                potionButton.interactable = gameData.IsPlayerTurn.Value && count > 0;
+                var buttonText = potionButton.GetComponentInChildren<TMP_Text>();
+                if (buttonText != null)
+                    buttonText.text = $"Use Potion ({count})";
+            }
+        }).AddTo(this);
+    }
+
+    /// <summary>
+    /// 敵情報を更新
+    /// </summary>
+    private void UpdateEnemyInfo()
+    {
+        if (enemyInfoText != null)
+        {
+            enemyInfoText.text = $"Enemy: {gameData.CurrentEnemy.Value} HP: {gameData.EnemyHP.Value}/{gameData.EnemyMaxHP.Value}";
+        }
+    }
+
+    /// <summary>
+    /// 装備情報を更新
+    /// </summary>
+    private void UpdateEquipmentInfo()
+    {
+        if (playerEquipmentText != null)
+        {
+            int atk = CharacterStats.CalculateAttackPower(gameData.Weapon.Value);
+            int def = CharacterStats.CalculateDefensePower(gameData.Shield.Value);
+            string weapon = string.IsNullOrEmpty(gameData.Weapon.Value) ? "None" : gameData.Weapon.Value;
+            string shield = string.IsNullOrEmpty(gameData.Shield.Value) ? "None" : gameData.Shield.Value;
+            playerEquipmentText.text = $"Weapon: {weapon} (ATK: {atk}) / Shield: {shield} (DEF: {def})";
+        }
+    }
+
+    /// <summary>
+    /// 戦闘パネルを表示して最初の敵を生成
+    /// </summary>
+    public void StartBattle()
+    {
+        if (battlePanel != null)
+            battlePanel.SetActive(true);
+        
+        SpawnEnemy(0);
     }
 
     /// <summary>
