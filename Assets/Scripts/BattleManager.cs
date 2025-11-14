@@ -17,12 +17,17 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Button defendButton;
     [SerializeField] private Button potionButton;
 
-    private GameData gameData;
+    private GameData gameData
+    {
+        get
+        {
+            return GameData.Instance;
+        }
+    }
     private bool isDefending = false;
 
     void Start()
     {
-        gameData = GameData.Instance;
         SetupUIBindings();
     }
 
@@ -118,7 +123,7 @@ public class BattleManager : MonoBehaviour
     {
         if (battlePanel != null)
             battlePanel.SetActive(true);
-        
+
         SpawnEnemy(0);
     }
 
@@ -128,13 +133,13 @@ public class BattleManager : MonoBehaviour
     public void SpawnEnemy(int difficulty)
     {
         difficulty = Mathf.Clamp(difficulty, 0, 2);
-        
+
         string enemyWord = EnemyData.GetRandomEnemy(difficulty);
         gameData.CurrentEnemy.Value = enemyWord;
         gameData.EnemyMaxHP.Value = EnemyData.CalculateEnemyHP(enemyWord);
         gameData.EnemyHP.Value = gameData.EnemyMaxHP.Value;
         gameData.EnemyAttack.Value = EnemyData.CalculateEnemyAttack(enemyWord);
-        
+
         GenerateEnemyNextAction();
         AddBattleLog($"A wild {enemyWord} appeared! (HP: {gameData.EnemyHP.Value})");
     }
@@ -144,7 +149,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void GenerateEnemyNextAction()
     {
-        gameData.EnemyNextAction.Value = $"攻撃: {gameData.EnemyAttack.Value}ダメージ";
+        gameData.EnemyNextAction.Value = $"Attack: {gameData.EnemyAttack.Value} DMG";
     }
 
     /// <summary>
@@ -156,8 +161,8 @@ public class BattleManager : MonoBehaviour
 
         int attackPower = CharacterStats.CalculateAttackPower(gameData.Weapon.Value);
         gameData.EnemyHP.Value -= attackPower;
-        
-        AddBattleLog($"あなたは {attackPower} ダメージを与えた!");
+
+        AddBattleLog($"You dealt {attackPower} damage!");
 
         if (gameData.EnemyHP.Value <= 0)
         {
@@ -177,8 +182,8 @@ public class BattleManager : MonoBehaviour
         if (!gameData.IsPlayerTurn.Value) return;
 
         isDefending = true;
-        AddBattleLog("あなたは防御態勢を取った!");
-        
+        AddBattleLog("You defend!");
+
         StartCoroutine(EnemyTurnCoroutine());
     }
 
@@ -189,9 +194,9 @@ public class BattleManager : MonoBehaviour
     {
         gameData.IsPlayerTurn.Value = false;
         yield return new WaitForSeconds(0.5f);
-        
+
         EnemyTurn();
-        
+
         yield return new WaitForSeconds(0.5f);
         gameData.IsPlayerTurn.Value = true;
     }
@@ -207,16 +212,16 @@ public class BattleManager : MonoBehaviour
         {
             int defensePower = CharacterStats.CalculateDefensePower(gameData.Shield.Value);
             damage = Mathf.Max(0, damage - defensePower);
-            AddBattleLog($"{gameData.CurrentEnemy.Value}の攻撃! 盾で {defensePower} 軽減!");
+            AddBattleLog($"{gameData.CurrentEnemy.Value} attacks! Shield blocked {defensePower}!");
             isDefending = false;
         }
         else
         {
-            AddBattleLog($"{gameData.CurrentEnemy.Value}の攻撃!");
+            AddBattleLog($"{gameData.CurrentEnemy.Value} attacks!");
         }
 
         gameData.PlayerHP.Value -= damage;
-        AddBattleLog($"あなたは {damage} ダメージを受けた!");
+        AddBattleLog($"You took {damage} damage!");
 
         if (gameData.PlayerHP.Value <= 0)
         {
@@ -234,8 +239,8 @@ public class BattleManager : MonoBehaviour
     private void CheckVictory()
     {
         gameData.DefeatedEnemies.Value++;
-        AddBattleLog($"{gameData.CurrentEnemy.Value}を倒した!");
-        
+        AddBattleLog($"Defeated {gameData.CurrentEnemy.Value}!");
+
         // Phase 2では単純に次の敵を生成（Phase 3で報酬選択に変更）
         int nextDifficulty = gameData.DefeatedEnemies.Value / 2;
         StartCoroutine(SpawnNextEnemyCoroutine(nextDifficulty));
@@ -255,7 +260,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void CheckDefeat()
     {
-        AddBattleLog("あなたは倒れた...");
+        AddBattleLog("You were defeated...");
         gameData.GameOver();
     }
 
@@ -267,7 +272,7 @@ public class BattleManager : MonoBehaviour
         if (battleLogText != null)
         {
             battleLogText.text = message + "\n" + battleLogText.text;
-            
+
             // ログが長くなりすぎないように制限
             string[] lines = battleLogText.text.Split('\n');
             if (lines.Length > 10)

@@ -22,7 +22,7 @@ public class NameInputManager : MonoBehaviour
     {
         nameInputPanel.SetActive(true);
         equipmentDisplayPanel.SetActive(false);
-        
+
         if (errorText != null)
             errorText.gameObject.SetActive(false);
     }
@@ -73,12 +73,12 @@ public class NameInputManager : MonoBehaviour
         int weaponAttack = CharacterStats.CalculateAttackPower(weapon);
         int shieldDefense = CharacterStats.CalculateDefensePower(shield);
 
-        weaponText.text = string.IsNullOrEmpty(weapon) 
-            ? "Weapon: None" 
+        weaponText.text = string.IsNullOrEmpty(weapon)
+            ? "Weapon: None"
             : $"Weapon: {weapon} (ATK: {weaponAttack})";
 
-        shieldText.text = string.IsNullOrEmpty(shield) 
-            ? "Shield: None" 
+        shieldText.text = string.IsNullOrEmpty(shield)
+            ? "Shield: None"
             : $"Shield: {shield} (DEF: {shieldDefense})";
 
         potionText.text = $"Potions: {potionCount}";
@@ -87,7 +87,7 @@ public class NameInputManager : MonoBehaviour
     public void OnBeginBattleClicked()
     {
         equipmentDisplayPanel.SetActive(false);
-        
+
         if (battleManager != null)
         {
             battleManager.StartBattle();
