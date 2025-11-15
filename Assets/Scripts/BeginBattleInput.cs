@@ -1,7 +1,7 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
-public class BeginBattleButton : MonoBehaviour, IPointerClickHandler
+public class BeginBattleInput : MonoBehaviour
 {
     private NameInputManager nameInputManager;
 
@@ -10,9 +10,10 @@ public class BeginBattleButton : MonoBehaviour, IPointerClickHandler
         nameInputManager = FindObjectOfType<NameInputManager>();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    void Update()
     {
-        if (nameInputManager != null)
+        var keyboard = Keyboard.current;
+        if (keyboard[Key.Enter].wasPressedThisFrame)
         {
             nameInputManager.OnBeginBattleClicked();
         }

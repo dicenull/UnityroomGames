@@ -1,7 +1,7 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
-public class StartGameButton : MonoBehaviour, IPointerClickHandler
+public class StartGameInput : MonoBehaviour
 {
     private NameInputManager nameInputManager;
 
@@ -10,9 +10,10 @@ public class StartGameButton : MonoBehaviour, IPointerClickHandler
         nameInputManager = FindObjectOfType<NameInputManager>();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void Update()
     {
-        if (nameInputManager != null)
+        var keyboard = Keyboard.current;
+        if (keyboard[Key.Enter].wasPressedThisFrame)
         {
             nameInputManager.OnStartGameClicked();
         }
