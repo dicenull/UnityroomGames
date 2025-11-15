@@ -74,14 +74,14 @@ public class NameInputManager : MonoBehaviour
         int shieldDefense = CharacterStats.CalculateDefensePower(shield);
 
         weaponText.text = string.IsNullOrEmpty(weapon)
-            ? "Weapon: None"
-            : $"Weapon: {weapon} (ATK: {weaponAttack})";
+            ? "/"
+            : $"{weapon} ({weaponAttack})".ToUpper();
 
         shieldText.text = string.IsNullOrEmpty(shield)
-            ? "Shield: None"
-            : $"Shield: {shield} (DEF: {shieldDefense})";
+            ? "/"
+            : $"{shield} ({shieldDefense})".ToUpper();
 
-        potionText.text = $"Potions: {potionCount}";
+        potionText.text = $"{potionCount}";
     }
 
     public void OnBeginBattleClicked()
