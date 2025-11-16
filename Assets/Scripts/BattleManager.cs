@@ -128,21 +128,22 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void GenerateEnemyNextAction()
     {
-        // 複数の行動パターンをランダムに選択
-        int actionType = UnityEngine.Random.Range(0, 3);
+        // 行動パターンをランダムに選択（重み付き）
+        // 通常攻撃: 50%, 強攻撃: 30%, 防御破壊: 20%
+        int roll = UnityEngine.Random.Range(0, 10);
         
-        switch (actionType)
+        if (roll < 5) // 0-4: 通常攻撃（50%）
         {
-            case 0: // 通常攻撃
-                gameData.EnemyNextAction.Value = $"Attack: {gameData.EnemyAttack.Value} DMG";
-                break;
-            case 1: // 強攻撃（1.5倍）
-                int strongAttack = Mathf.RoundToInt(gameData.EnemyAttack.Value * 1.5f);
-                gameData.EnemyNextAction.Value = $"Strong Attack: {strongAttack} DMG";
-                break;
-            case 2: // 防御破壊攻撃（防御無視）
-                gameData.EnemyNextAction.Value = $"Guard Break: {gameData.EnemyAttack.Value} DMG (Ignores defense)";
-                break;
+            gameData.EnemyNextAction.Value = $"Attack: {gameData.EnemyAttack.Value} DMG";
+        }
+        else if (roll < 8) // 5-7: 強攻撃（30%）
+        {
+            int strongAttack = Mathf.RoundToInt(gameData.EnemyAttack.Value * 1.5f);
+            gameData.EnemyNextAction.Value = $"Strong Attack: {strongAttack} DMG";
+        }
+        else // 8-9: 防御破壊（20%）
+        {
+            gameData.EnemyNextAction.Value = $"Guard Break: {gameData.EnemyAttack.Value} DMG (Ignores defense)";
         }
     }
 
