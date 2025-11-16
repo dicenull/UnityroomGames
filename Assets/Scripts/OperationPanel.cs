@@ -53,8 +53,7 @@ public class OperationPanel : MonoBehaviour
 
         // 戦闘フェーズ
         string operations = "";
-        operations += $"Attack [{weapon}] - Use your weapon
-";
+        operations += $"Attack [{weapon}] - Use your weapon";
         operations += $"Defend [{shield}] - Use your shield";
 
         operationText.text = operations;

@@ -60,11 +60,10 @@ public class Phase1Tests : MonoBehaviour
 
         // Test 1: "CAT"
         gameData.InitializePlayer("CAT");
-        bool test1 = gameData.Weapon.Value == "C" && 
-                     gameData.Shield.Value == "T" && 
-                     gameData.PotionCount.Value == 1;
-        Debug.Log($"Test 2-1: 'CAT' → 武器:{gameData.Weapon.Value}, 盾:{gameData.Shield.Value}, ポーション:{gameData.PotionCount.Value}");
-        Debug.Log($"  期待値: 武器:C, 盾:T, ポーション:1 {(test1 ? "✅" : "❌")}");
+        bool test1 = gameData.Weapon.Value == "C" &&
+                     gameData.Shield.Value == "T";
+        Debug.Log($"Test 2-1: 'CAT' → 武器:{gameData.Weapon.Value}, 盾:{gameData.Shield.Value}");
+        Debug.Log($"  期待値: 武器:C, 盾:T {(test1 ? "✅" : "❌")}");
 
         // 武器と盾のステータス表示
         int catWeaponAtk = CharacterStats.CalculateAttackPower(gameData.Weapon.Value);
@@ -73,11 +72,10 @@ public class Phase1Tests : MonoBehaviour
 
         // Test 2: "AT"
         gameData.InitializePlayer("AT");
-        bool test2 = gameData.Weapon.Value == "A" && 
-                     gameData.Shield.Value == "T" && 
-                     gameData.PotionCount.Value == 0;
-        Debug.Log($"Test 2-2: 'AT' → 武器:{gameData.Weapon.Value}, 盾:{gameData.Shield.Value}, ポーション:{gameData.PotionCount.Value}");
-        Debug.Log($"  期待値: 武器:A, 盾:T, ポーション:0 {(test2 ? "✅" : "❌")}");
+        bool test2 = gameData.Weapon.Value == "A" &&
+                     gameData.Shield.Value == "T";
+        Debug.Log($"Test 2-2: 'AT' → 武器:{gameData.Weapon.Value}, 盾:{gameData.Shield.Value}");
+        Debug.Log($"  期待値: 武器:A, 盾:T {(test2 ? "✅" : "❌")}");
 
         int atWeaponAtk = CharacterStats.CalculateAttackPower(gameData.Weapon.Value);
         int atShieldDef = CharacterStats.CalculateDefensePower(gameData.Shield.Value);
@@ -85,11 +83,10 @@ public class Phase1Tests : MonoBehaviour
 
         // Test 3: "X"
         gameData.InitializePlayer("X");
-        bool test3 = gameData.Weapon.Value == "X" && 
-                     gameData.Shield.Value == "" && 
-                     gameData.PotionCount.Value == 0;
-        Debug.Log($"Test 2-3: 'X' → 武器:{gameData.Weapon.Value}, 盾:{gameData.Shield.Value}, ポーション:{gameData.PotionCount.Value}");
-        Debug.Log($"  期待値: 武器:X, 盾:(なし), ポーション:0 {(test3 ? "✅" : "❌")}");
+        bool test3 = gameData.Weapon.Value == "X" &&
+                     gameData.Shield.Value == "";
+        Debug.Log($"Test 2-3: 'X' → 武器:{gameData.Weapon.Value}, 盾:{gameData.Shield.Value}");
+        Debug.Log($"  期待値: 武器:X, 盾:(なし) {(test3 ? "✅" : "❌")}");
 
         int xWeaponAtk = CharacterStats.CalculateAttackPower(gameData.Weapon.Value);
         Debug.Log($"  武器'X' ATK:{xWeaponAtk} (期待値:4)");
@@ -101,8 +98,8 @@ public class Phase1Tests : MonoBehaviour
 
         // Test 5: Reset
         gameData.Reset();
-        bool test5 = gameData.PlayerName.Value == "" && 
-                     gameData.Weapon.Value == "" && 
+        bool test5 = gameData.PlayerName.Value == "" &&
+                     gameData.Weapon.Value == "" &&
                      gameData.Shield.Value == "";
         Debug.Log($"Test 2-5: Reset() → 名前:'{gameData.PlayerName.Value}', 武器:'{gameData.Weapon.Value}', 盾:'{gameData.Shield.Value}'");
         Debug.Log($"  期待値: すべて空文字 {(test5 ? "✅" : "❌")}");

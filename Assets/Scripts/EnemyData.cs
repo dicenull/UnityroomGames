@@ -11,19 +11,25 @@ public static class EnemyData
     /// <summary>
     /// 敵のHPを計算（文字数 * 5）
     /// </summary>
+    /// <summary>
+    /// 敵のHPを計算（文字数 * 3）
+    /// </summary>
     public static int CalculateEnemyHP(string word)
     {
         if (string.IsNullOrEmpty(word)) return 0;
-        return word.Length * 5;
+        return word.Length * 3;
     }
 
     /// <summary>
     /// 敵の攻撃力を計算（文字数 + 2）
     /// </summary>
+    /// <summary>
+    /// 敵の攻撃力を計算（文字数 + 1）
+    /// </summary>
     public static int CalculateEnemyAttack(string word)
     {
         if (string.IsNullOrEmpty(word)) return 0;
-        return word.Length + 2;
+        return word.Length + 1;
     }
 
     /// <summary>
