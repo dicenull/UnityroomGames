@@ -7,20 +7,22 @@ using System.Collections.Generic;
 /// Phase 3: 敵撃破時の報酬選択システム
 /// 敵の文字から1文字を選択し、武器または盾に追加する
 /// </summary>
+/// <summary>
+/// Phase 3: 敵撃破時の報酬選択システム
+/// FR-021対応: キーボード入力のみで操作（ボタン不使用）
+/// </summary>
 public class RewardManager : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject rewardPanel;
     [SerializeField] private TextMeshProUGUI titleText;
-    [SerializeField] private Transform letterButtonContainer;
-    [SerializeField] private GameObject letterButtonPrefab;
+    [SerializeField] private TextMeshProUGUI letterOptionsText;
     [SerializeField] private GameObject equipChoicePanel;
     [SerializeField] private TextMeshProUGUI equipChoiceText;
-    [SerializeField] private GameObject weaponKeyIndicator;
-    [SerializeField] private GameObject shieldKeyIndicator;
 
     private BattleManager battleManager;
     private char selectedLetter;
+    private string currentEnemyWord;
 
     private void Awake()
     {
@@ -29,12 +31,28 @@ public class RewardManager : MonoBehaviour
 
     private void Update()
     {
-        // キーボード入力で装備選択（装備選択画面が表示されている時のみ）
-        if (equipChoicePanel != null && equipChoicePanel.activeSelf)
-        {
-            var keyboard = UnityEngine.InputSystem.Keyboard.current;
-            if (keyboard == null) return;
+        if (rewardPanel == null || !rewardPanel.activeSelf) return;
 
+        var keyboard = UnityEngine.InputSystem.Keyboard.current;
+        if (keyboard == null) return;
+
+        // 文字選択フェーズ（装備選択画面が非表示の時）
+        if (equipChoicePanel != null && !equipChoicePanel.activeSelf && !string.IsNullOrEmpty(currentEnemyWord))
+        {
+            // 数字キー1～9で文字選択
+            for (int i = 0; i < currentEnemyWord.Length && i < 9; i++)
+            {
+                var key = UnityEngine.InputSystem.Key.Digit1 + i;
+                if (keyboard[key].wasPressedThisFrame)
+                {
+                    OnLetterSelected(currentEnemyWord[i]);
+                    break;
+                }
+            }
+        }
+        // 装備選択フェーズ
+        else if (equipChoicePanel != null && equipChoicePanel.activeSelf)
+        {
             // 武器キー
             string weaponKey = GameData.Instance.Weapon.Value;
             if (!string.IsNullOrEmpty(weaponKey))
@@ -66,28 +84,18 @@ public class RewardManager : MonoBehaviour
     {
         if (rewardPanel == null) return;
 
-        // 既存の文字ボタンをクリア
-        foreach (Transform child in letterButtonContainer)
+        currentEnemyWord = enemyWord;
+
+        // 文字選択オプションを表示
+        string options = "";
+        for (int i = 0; i < enemyWord.Length && i < 9; i++)
         {
-            Destroy(child.gameObject);
+            options += $"[{i + 1}] {enemyWord[i]}\n";
         }
 
-        // 敵の文字ごとにボタンを生成
-        foreach (char letter in enemyWord)
+        if (letterOptionsText != null)
         {
-            GameObject buttonObj = Instantiate(letterButtonPrefab, letterButtonContainer);
-            TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-            if (buttonText != null)
-            {
-                buttonText.text = letter.ToString();
-            }
-
-            Button button = buttonObj.GetComponent<Button>();
-            if (button != null)
-            {
-                char capturedLetter = letter; // クロージャのためキャプチャ
-                button.onClick.AddListener(() => OnLetterSelected(capturedLetter));
-            }
+            letterOptionsText.text = options;
         }
 
         rewardPanel.SetActive(true);
@@ -114,8 +122,7 @@ public class RewardManager : MonoBehaviour
         {
             string weaponKey = GameData.Instance.Weapon.Value;
             string shieldKey = GameData.Instance.Shield.Value;
-            equipChoiceText.text = $"Add '{letter}' to...
-Weapon [{weaponKey}] / Shield [{shieldKey}]";
+            equipChoiceText.text = $"Add '{letter}' to...\nWeapon [{weaponKey}] / Shield [{shieldKey}]";
         }
     }
 
@@ -148,6 +155,7 @@ Weapon [{weaponKey}] / Shield [{shieldKey}]";
             rewardPanel.SetActive(false);
         if (equipChoicePanel != null)
             equipChoicePanel.SetActive(false);
+        currentEnemyWord = "";
     }
 
     /// <summary>
