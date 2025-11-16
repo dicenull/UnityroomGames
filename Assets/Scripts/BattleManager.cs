@@ -9,6 +9,7 @@ public class BattleManager : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject battlePanel;
     [SerializeField] private RewardManager rewardManager;
+    [SerializeField] private VictoryManager victoryManager;
     [SerializeField] private TMP_Text playerHPText;
     [SerializeField] private TMP_Text enemyInfoText;
     [SerializeField] private TMP_Text enemyNextActionText;
@@ -300,9 +301,12 @@ public class BattleManager : MonoBehaviour
             AddBattleLog("=== VICTORY ===");
             AddBattleLog($"You defeated the boss {defeatedEnemy}!");
             
-            // クリア画面を表示（後で実装）
+            // クリア画面を表示
             battlePanel.SetActive(false);
-            // TODO: Show victory screen
+            if (victoryManager != null)
+            {
+                victoryManager.ShowVictoryScreen();
+            }
             return;
         }
 
