@@ -124,6 +124,17 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 報酬選択後に次の敵を生成してバトルを再開
+    /// </summary>
+    public void ResumeWithNextEnemy(int difficulty)
+    {
+        if (battlePanel != null)
+            battlePanel.SetActive(true);
+        
+        SpawnEnemy(difficulty);
+    }
+
+    /// <summary>
     /// 敵の次の行動を生成して予告
     /// </summary>
     private void GenerateEnemyNextAction()

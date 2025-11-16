@@ -161,6 +161,9 @@ public class RewardManager : MonoBehaviour
     /// <summary>
     /// 次の敵を生成（難易度スケーリング付き）
     /// </summary>
+    /// <summary>
+    /// 次の敵を生成（難易度スケーリング付き）
+    /// </summary>
     private void SpawnNextEnemy()
     {
         int defeatedCount = GameData.Instance.DefeatedEnemies.Value;
@@ -168,23 +171,7 @@ public class RewardManager : MonoBehaviour
         
         if (battleManager != null)
         {
-            // BattlePanelを再表示
-            GameObject battlePanel = battleManager.GetComponent<BattleManager>()?.gameObject;
-            if (battlePanel != null)
-            {
-                var battlePanelField = battleManager.GetType().GetField("battlePanel", 
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                if (battlePanelField != null)
-                {
-                    GameObject panel = battlePanelField.GetValue(battleManager) as GameObject;
-                    if (panel != null)
-                    {
-                        panel.SetActive(true);
-                    }
-                }
-            }
-            
-            battleManager.SpawnEnemy(difficulty);
+            battleManager.ResumeWithNextEnemy(difficulty);
         }
     }
 }
