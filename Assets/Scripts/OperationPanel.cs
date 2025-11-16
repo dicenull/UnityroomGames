@@ -43,29 +43,29 @@ public class OperationPanel : MonoBehaviour
         // 名前入力フェーズ
         if (string.IsNullOrEmpty(weapon))
         {
-            operationText.text = "Available Operations:\n• Start Game [Enter]";
+            operationText.text = "Start Game [Enter]";
             return;
         }
 
         // 装備確認フェーズ（戦闘開始前）
         if (GameData.Instance.CurrentEnemy.Value == "")
         {
-            operationText.text = "Available Operations:\n• Begin Battle [Enter]";
+            operationText.text = "Begin Battle [Enter]";
             return;
         }
 
         // 戦闘フェーズ
-        string operations = "Available Operations:\n";
-        operations += $"• Attack [{weapon}] - Use your weapon\n";
-        operations += $"• Defend [{shield}] - Use your shield\n";
+        string operations = "";
+        operations += $"Attack [{weapon}] - Use your weapon\n";
+        operations += $"Defend [{shield}] - Use your shield\n";
 
         if (potionCount > 0)
         {
-            operations += $"• Use Potion [R] - Heal HP ({potionCount} left)";
+            operations += $"Use Potion [R] - Heal HP ({potionCount} left)";
         }
         else
         {
-            operations += "• Use Potion [R] - <color=#888888>(No potions)</color>";
+            operations += "Use Potion [R] - <color=#888888>(No potions)</color>";
         }
 
         operationText.text = operations;
