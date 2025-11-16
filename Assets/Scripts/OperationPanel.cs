@@ -14,7 +14,6 @@ public class OperationPanel : MonoBehaviour
 
     private IDisposable weaponSubscription;
     private IDisposable shieldSubscription;
-    private IDisposable potionSubscription;
     private IDisposable gameStateSubscription;
 
     private void Start()
@@ -25,10 +24,9 @@ public class OperationPanel : MonoBehaviour
 
     private void SubscribeToGameData()
     {
-        // 武器・盾・ポーション数・敵情報の変更を監視
+        // 武器・盾・敵情報の変更を監視
         weaponSubscription = GameData.Instance.Weapon.Subscribe(_ => UpdateOperationText());
         shieldSubscription = GameData.Instance.Shield.Subscribe(_ => UpdateOperationText());
-        potionSubscription = GameData.Instance.PotionCount.Subscribe(_ => UpdateOperationText());
         gameStateSubscription = GameData.Instance.CurrentEnemy.Subscribe(_ => UpdateOperationText());
     }
 
@@ -38,7 +36,6 @@ public class OperationPanel : MonoBehaviour
 
         string weapon = GameData.Instance.Weapon.Value;
         string shield = GameData.Instance.Shield.Value;
-        int potionCount = GameData.Instance.PotionCount.Value;
 
         // 名前入力フェーズ
         if (string.IsNullOrEmpty(weapon))
@@ -56,17 +53,9 @@ public class OperationPanel : MonoBehaviour
 
         // 戦闘フェーズ
         string operations = "";
-        operations += $"Attack [{weapon}] - Use your weapon\n";
-        operations += $"Defend [{shield}] - Use your shield\n";
-
-        if (potionCount > 0)
-        {
-            operations += $"Use Potion [R] - Heal HP ({potionCount} left)";
-        }
-        else
-        {
-            operations += "Use Potion [R] - <color=#888888>(No potions)</color>";
-        }
+        operations += $"Attack [{weapon}] - Use your weapon
+";
+        operations += $"Defend [{shield}] - Use your shield";
 
         operationText.text = operations;
     }
@@ -112,7 +101,6 @@ public class OperationPanel : MonoBehaviour
     {
         weaponSubscription?.Dispose();
         shieldSubscription?.Dispose();
-        potionSubscription?.Dispose();
         gameStateSubscription?.Dispose();
     }
 }

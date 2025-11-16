@@ -13,7 +13,6 @@ public class NameInputManager : MonoBehaviour
     [SerializeField] private GameObject equipmentDisplayPanel;
     [SerializeField] private TextMeshProUGUI weaponText;
     [SerializeField] private TextMeshProUGUI shieldText;
-    [SerializeField] private TextMeshProUGUI potionText;
 
     [Header("Battle Manager")]
     [SerializeField] private BattleManager battleManager;
@@ -68,7 +67,6 @@ public class NameInputManager : MonoBehaviour
 
         string weapon = GameData.Instance.Weapon.Value;
         string shield = GameData.Instance.Shield.Value;
-        int potionCount = GameData.Instance.PotionCount.Value;
 
         int weaponAttack = CharacterStats.CalculateAttackPower(weapon);
         int shieldDefense = CharacterStats.CalculateDefensePower(shield);
@@ -80,8 +78,6 @@ public class NameInputManager : MonoBehaviour
         shieldText.text = string.IsNullOrEmpty(shield)
             ? "/"
             : $"{shield} ({shieldDefense})".ToUpper();
-
-        potionText.text = $"{potionCount}";
     }
 
     public void OnBeginBattleClicked()

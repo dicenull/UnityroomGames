@@ -10,7 +10,6 @@ public class GameData : MonoBehaviour
     public ReactiveProperty<string> PlayerName = new("");
     public ReactiveProperty<string> Weapon = new("");
     public ReactiveProperty<string> Shield = new("");
-    public ReactiveProperty<int> PotionCount = new(0);
     public ReactiveProperty<int> PlayerHP = new(30);
     public ReactiveProperty<int> PlayerMaxHP = new(30);
 
@@ -51,7 +50,6 @@ public class GameData : MonoBehaviour
         PlayerName.Value = name;
         Weapon.Value = name.Length >= 1 ? name[0].ToString() : "";
         Shield.Value = name.Length >= 2 ? name[name.Length - 1].ToString() : "";
-        PotionCount.Value = Mathf.Max(0, name.Length - 2);
         PlayerHP.Value = PlayerMaxHP.Value;
     }
 
@@ -77,7 +75,6 @@ public class GameData : MonoBehaviour
         PlayerName.Value = "";
         Weapon.Value = "";
         Shield.Value = "";
-        PotionCount.Value = 0;
         PlayerHP.Value = PlayerMaxHP.Value;
 
         // Enemy Data

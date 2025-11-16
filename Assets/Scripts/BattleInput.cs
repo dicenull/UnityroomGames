@@ -14,7 +14,6 @@ public class BattleInput : MonoBehaviour
         battleManager = FindObjectOfType<BattleManager>();
         weaponKey = StringToKey.FromString(GameData.Instance.Weapon.Value);
         shieldKey = StringToKey.FromString(GameData.Instance.Shield.Value);
-        // TODO: set Potion key
 
         Debug.Log($"weapon: {weaponKey}, shield: {shieldKey}");
     }
