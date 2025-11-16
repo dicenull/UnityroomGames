@@ -10,12 +10,12 @@
 | Phase | Status | Tasks Completed | Tasks Total | Progress |
 |-------|--------|----------------|-------------|----------|
 | Phase 1 (P1) | ✅ Completed | 5 / 5 | 5 | 100% |
-| Phase 2 (P2) | 🟡 In Progress | 4 / 5 | 5 | 80% |
+| Phase 2 (P2) | 🟡 In Progress | 4 / 6 | 6 | 67% |
 | Phase 3 (P3) | ⚪ Not Started | 0 / 5 | 5 | 0% |
 | Phase 4 (P4) | ⚪ Not Started | 0 / 3 | 3 | 0% |
 | Phase 5 (P5) | ⚪ Not Started | 0 / 6 | 6 | 0% |
 | Final | ⚪ Not Started | 0 / 3 | 3 | 0% |
-| **Total** | **🟡 In Progress** | **9 / 27** | **27** | **33%** |
+| **Total** | **🟡 In Progress** | **9 / 28** | **28** | **32%** |
 
 ---
 
@@ -123,6 +123,31 @@
 - `Assets/Scripts/AttackButton.cs`
 - `Assets/Scripts/DefendButton.cs`
 - `Assets/Scripts/PotionButton.cs`
+
+---
+
+### ⏳ Task 2.4.5: 操作パネル実装 (FR-020対応)
+**Status**: ✅ COMPLETED  
+**Completed**: 2025-11-16 19:32
+
+**Implemented**:
+- [x] OperationPanel.cs作成
+- [x] 現在選択可能な操作を常時表示
+- [x] ターン状態に応じて動的更新
+  - 名前入力フェーズ: "Start Game [Enter]"
+  - 装備確認フェーズ: "Begin Battle [Enter]"
+  - 戦闘フェーズ: "Attack [武器文字] / Defend [盾文字] / Use Potion [R]"
+- [x] ReactivePropertyで自動更新
+- [x] ポーション数が0の時はグレーアウト表示
+
+**Files Created**:
+- `Assets/Scripts/OperationPanel.cs`
+
+**Manual Setup Required**:
+1. TextTextGame.unityを開く
+2. Canvas配下に`OperationPanel` (Panel)を作成
+3. その中に`OperationText` (TextMeshProUGUI)を作成
+4. OperationPanelコンポーネントをアタッチし、OperationTextを接続
 
 ---
 
