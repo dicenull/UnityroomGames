@@ -11,22 +11,28 @@ using System.Collections.Generic;
 /// Phase 3: 敵撃破時の報酬選択システム
 /// FR-021対応: キーボード入力のみで操作（ボタン不使用）
 /// </summary>
+/// <summary>
+/// Phase 3: 敵撃破時の報酬選択システム
+/// FR-021対応: キーボード入力のみで操作（ボタン不使用）
+/// </summary>
 public class RewardManager : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject rewardPanel;
-    [SerializeField] private TextMeshProUGUI titleText;
-    [SerializeField] private TextMeshProUGUI letterOptionsText;
-    [SerializeField] private GameObject equipChoicePanel;
-    [SerializeField] private TextMeshProUGUI equipChoiceText;
+    [SerializeField] private OperationPanel operationPanel;
 
     private BattleManager battleManager;
     private char selectedLetter;
     private string currentEnemyWord;
+    private bool isEquipSelectionPhase = false;
 
     private void Awake()
     {
         battleManager = FindObjectOfType<BattleManager>();
+        if (operationPanel == null)
+        {
+            operationPanel = FindObjectOfType<OperationPanel>();
+        }
     }
 
     private void Update()
@@ -36,8 +42,8 @@ public class RewardManager : MonoBehaviour
         var keyboard = UnityEngine.InputSystem.Keyboard.current;
         if (keyboard == null) return;
 
-        // 文字選択フェーズ（装備選択画面が非表示の時）
-        if (equipChoicePanel != null && !equipChoicePanel.activeSelf && !string.IsNullOrEmpty(currentEnemyWord))
+        // 文字選択フェーズ
+        if (!isEquipSelectionPhase && !string.IsNullOrEmpty(currentEnemyWord))
         {
             // 数字キー1～9で文字選択
             for (int i = 0; i < currentEnemyWord.Length && i < 9; i++)
@@ -51,7 +57,7 @@ public class RewardManager : MonoBehaviour
             }
         }
         // 装備選択フェーズ
-        else if (equipChoicePanel != null && equipChoicePanel.activeSelf)
+        else if (isEquipSelectionPhase)
         {
             // 武器キー
             string weaponKey = GameData.Instance.Weapon.Value;
@@ -85,25 +91,15 @@ public class RewardManager : MonoBehaviour
         if (rewardPanel == null) return;
 
         currentEnemyWord = enemyWord;
-
-        // 文字選択オプションを表示
-        string options = "";
-        for (int i = 0; i < enemyWord.Length && i < 9; i++)
-        {
-            options += $"[{i + 1}] {enemyWord[i]}\n";
-        }
-
-        if (letterOptionsText != null)
-        {
-            letterOptionsText.text = options;
-        }
+        isEquipSelectionPhase = false;
 
         rewardPanel.SetActive(true);
-        if (equipChoicePanel != null)
-            equipChoicePanel.SetActive(false);
         
-        if (titleText != null)
-            titleText.text = $"Enemy '{enemyWord}' defeated! Choose a letter:";
+        // OperationPanelに文字選択操作を表示
+        if (operationPanel != null)
+        {
+            operationPanel.ShowRewardLetterSelection(enemyWord);
+        }
     }
 
     /// <summary>
@@ -112,17 +108,12 @@ public class RewardManager : MonoBehaviour
     private void OnLetterSelected(char letter)
     {
         selectedLetter = letter;
+        isEquipSelectionPhase = true;
 
-        if (equipChoicePanel != null)
+        // OperationPanelに装備選択操作を表示
+        if (operationPanel != null)
         {
-            equipChoicePanel.SetActive(true);
-        }
-
-        if (equipChoiceText != null)
-        {
-            string weaponKey = GameData.Instance.Weapon.Value;
-            string shieldKey = GameData.Instance.Shield.Value;
-            equipChoiceText.text = $"Add '{letter}' to...\nWeapon [{weaponKey}] / Shield [{shieldKey}]";
+            operationPanel.ShowRewardEquipSelection(letter);
         }
     }
 
@@ -153,9 +144,15 @@ public class RewardManager : MonoBehaviour
     {
         if (rewardPanel != null)
             rewardPanel.SetActive(false);
-        if (equipChoicePanel != null)
-            equipChoicePanel.SetActive(false);
+        
         currentEnemyWord = "";
+        isEquipSelectionPhase = false;
+
+        // OperationPanelを戦闘操作表示に戻す
+        if (operationPanel != null)
+        {
+            operationPanel.ShowBattleOperations();
+        }
     }
 
     /// <summary>

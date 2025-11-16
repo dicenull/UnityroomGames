@@ -71,6 +71,43 @@ public class OperationPanel : MonoBehaviour
         operationText.text = operations;
     }
 
+    /// <summary>
+    /// 報酬選択フェーズの操作表示（RewardManagerから呼び出される）
+    /// </summary>
+    public void ShowRewardLetterSelection(string enemyWord)
+    {
+        if (operationText == null) return;
+
+        string operations = "Choose a letter:\n";
+        for (int i = 0; i < enemyWord.Length && i < 9; i++)
+        {
+            operations += $"[{i + 1}] {enemyWord[i]}\n";
+        }
+
+        operationText.text = operations;
+    }
+
+    /// <summary>
+    /// 装備選択フェーズの操作表示（RewardManagerから呼び出される）
+    /// </summary>
+    public void ShowRewardEquipSelection(char letter)
+    {
+        if (operationText == null) return;
+
+        string weapon = GameData.Instance.Weapon.Value;
+        string shield = GameData.Instance.Shield.Value;
+
+        operationText.text = $"Add '{letter}' to:\nWeapon [{weapon}] / Shield [{shield}]";
+    }
+
+    /// <summary>
+    /// 通常の戦闘操作表示に戻す（RewardManagerから呼び出される）
+    /// </summary>
+    public void ShowBattleOperations()
+    {
+        UpdateOperationText();
+    }
+
     private void OnDestroy()
     {
         weaponSubscription?.Dispose();
