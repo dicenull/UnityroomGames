@@ -25,10 +25,11 @@ public class OperationPanel : MonoBehaviour
 
     private void SubscribeToGameData()
     {
-        // 武器・盾・ポーション数の変更を監視
+        // 武器・盾・ポーション数・敵情報の変更を監視
         weaponSubscription = GameData.Instance.Weapon.Subscribe(_ => UpdateOperationText());
         shieldSubscription = GameData.Instance.Shield.Subscribe(_ => UpdateOperationText());
         potionSubscription = GameData.Instance.PotionCount.Subscribe(_ => UpdateOperationText());
+        gameStateSubscription = GameData.Instance.CurrentEnemy.Subscribe(_ => UpdateOperationText());
     }
 
     private void UpdateOperationText()
