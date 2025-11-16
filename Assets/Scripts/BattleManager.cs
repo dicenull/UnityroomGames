@@ -134,6 +134,28 @@ public class BattleManager : MonoBehaviour
         SpawnEnemy(difficulty);
     }
 
+
+    /// <summary>
+    /// ボス敵を生成
+    /// </summary>
+    public void SpawnBoss()
+    {
+        if (battlePanel != null)
+            battlePanel.SetActive(true);
+
+        gameData.IsBossBattle.Value = true;
+        
+        string bossWord = EnemyData.GetRandomBoss();
+        gameData.CurrentEnemy.Value = bossWord;
+        gameData.EnemyMaxHP.Value = EnemyData.CalculateBossHP(bossWord);
+        gameData.EnemyHP.Value = gameData.EnemyMaxHP.Value;
+        gameData.EnemyAttack.Value = EnemyData.CalculateBossAttack(bossWord);
+
+        GenerateEnemyNextAction();
+        AddBattleLog("=== BOSS BATTLE ===");
+        AddBattleLog($"A mighty {bossWord} appeared! (HP: {gameData.EnemyHP.Value})");
+    }
+
     /// <summary>
     /// 敵の次の行動を生成して予告
     /// </summary>
@@ -269,8 +291,23 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void CheckVictory()
     {
-        gameData.DefeatedEnemies.Value++;
         string defeatedEnemy = gameData.CurrentEnemy.Value;
+        
+        // ボスを倒した場合
+        if (gameData.IsBossBattle.Value)
+        {
+            gameData.IsVictory.Value = true;
+            AddBattleLog("=== VICTORY ===");
+            AddBattleLog($"You defeated the boss {defeatedEnemy}!");
+            
+            // クリア画面を表示（後で実装）
+            battlePanel.SetActive(false);
+            // TODO: Show victory screen
+            return;
+        }
+
+        // 通常敵を倒した場合
+        gameData.DefeatedEnemies.Value++;
         AddBattleLog($"Defeated {defeatedEnemy}!");
 
         // Phase 3: 報酬選択画面を表示

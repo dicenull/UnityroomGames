@@ -8,6 +8,36 @@ public static class EnemyData
     public static readonly string[] MediumEnemies = { "BIRD", "FISH", "BEAR", "WOLF" };
     public static readonly string[] HardEnemies = { "TIGER", "EAGLE", "SHARK" };
 
+    // ボス敵リスト
+    public static readonly string[] BossEnemies = { "DRAGON", "PHOENIX", "KRAKEN", "CHIMERA" };
+
+    /// <summary>
+    /// ボスのHPを計算（文字数 * 5 - 通常敵より強い）
+    /// </summary>
+    public static int CalculateBossHP(string word)
+    {
+        if (string.IsNullOrEmpty(word)) return 0;
+        return word.Length * 5;
+    }
+
+    /// <summary>
+    /// ボスの攻撃力を計算（文字数 + 3 - 通常敵より強い）
+    /// </summary>
+    public static int CalculateBossAttack(string word)
+    {
+        if (string.IsNullOrEmpty(word)) return 0;
+        return word.Length + 3;
+    }
+
+    /// <summary>
+    /// ランダムなボス敵を取得
+    /// </summary>
+    public static string GetRandomBoss()
+    {
+        int randomIndex = Random.Range(0, BossEnemies.Length);
+        return BossEnemies[randomIndex];
+    }
+
     /// <summary>
     /// 敵のHPを計算（文字数 * 5）
     /// </summary>

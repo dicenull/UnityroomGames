@@ -167,11 +167,19 @@ public class RewardManager : MonoBehaviour
     private void SpawnNextEnemy()
     {
         int defeatedCount = GameData.Instance.DefeatedEnemies.Value;
-        int difficulty = Mathf.Clamp(defeatedCount / 2, 0, 2); // 2体ごとに難易度上昇
         
         if (battleManager != null)
         {
-            battleManager.ResumeWithNextEnemy(difficulty);
+            // 5体倒したらボス出現
+            if (defeatedCount >= 5)
+            {
+                battleManager.SpawnBoss();
+            }
+            else
+            {
+                int difficulty = Mathf.Clamp(defeatedCount / 2, 0, 2); // 2体ごとに難易度上昇
+                battleManager.ResumeWithNextEnemy(difficulty);
+            }
         }
     }
 }

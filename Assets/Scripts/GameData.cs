@@ -22,6 +22,10 @@ public class GameData : MonoBehaviour
     public ReactiveProperty<bool> IsPlayerTurn = new(true);
     public ReactiveProperty<int> DefeatedEnemies = new(0);
 
+    // Game State
+    public ReactiveProperty<bool> IsBossBattle = new(false);
+    public ReactiveProperty<bool> IsVictory = new(false);
+
     public static GameData Instance { get; private set; }
 
     GameData()
@@ -85,5 +89,7 @@ public class GameData : MonoBehaviour
         EnemyNextAction.Value = "";
         IsPlayerTurn.Value = true;
         DefeatedEnemies.Value = 0;
+        IsBossBattle.Value = false;
+        IsVictory.Value = false;
     }
 }
