@@ -5,14 +5,14 @@ using UnityEngine;
 public class GameData : MonoBehaviour
 {
     public ReactiveProperty<bool> IsGameOver = new(false);
-    
+
     // Player Data
     public ReactiveProperty<string> PlayerName = new("");
     public ReactiveProperty<string> Weapon = new("");
     public ReactiveProperty<string> Shield = new("");
     public ReactiveProperty<int> PotionCount = new(0);
-    public ReactiveProperty<int> PlayerHP = new(20);
-    public ReactiveProperty<int> PlayerMaxHP = new(20);
+    public ReactiveProperty<int> PlayerHP = new(30);
+    public ReactiveProperty<int> PlayerMaxHP = new(30);
 
     // Enemy Data (Phase 2)
     public ReactiveProperty<string> CurrentEnemy = new("");
@@ -22,7 +22,7 @@ public class GameData : MonoBehaviour
     public ReactiveProperty<string> EnemyNextAction = new("");
     public ReactiveProperty<bool> IsPlayerTurn = new(true);
     public ReactiveProperty<int> DefeatedEnemies = new(0);
-    
+
     public static GameData Instance { get; private set; }
 
     GameData()

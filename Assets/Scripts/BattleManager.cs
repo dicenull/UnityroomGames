@@ -14,9 +14,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private TMP_Text enemyNextActionText;
     [SerializeField] private TMP_Text playerEquipmentText;
     [SerializeField] private TMP_Text battleLogText;
-    [SerializeField] private Button attackButton;
-    [SerializeField] private Button defendButton;
-    [SerializeField] private Button potionButton;
 
     private GameData gameData
     {
@@ -70,25 +67,6 @@ public class BattleManager : MonoBehaviour
         gameData.Weapon.Subscribe(_ => UpdateEquipmentInfo()).AddTo(this);
         gameData.Shield.Subscribe(_ => UpdateEquipmentInfo()).AddTo(this);
 
-        // ターン管理によるボタン制御
-        gameData.IsPlayerTurn.Subscribe(isPlayerTurn =>
-        {
-            if (attackButton != null) attackButton.interactable = isPlayerTurn;
-            if (defendButton != null) defendButton.interactable = isPlayerTurn;
-            if (potionButton != null) potionButton.interactable = isPlayerTurn && gameData.PotionCount.Value > 0;
-        }).AddTo(this);
-
-        // ポーション数によるボタン制御
-        gameData.PotionCount.Subscribe(count =>
-        {
-            if (potionButton != null)
-            {
-                potionButton.interactable = gameData.IsPlayerTurn.Value && count > 0;
-                var buttonText = potionButton.GetComponentInChildren<TMP_Text>();
-                if (buttonText != null)
-                    buttonText.text = $"Use Potion ({count})";
-            }
-        }).AddTo(this);
     }
 
     /// <summary>
