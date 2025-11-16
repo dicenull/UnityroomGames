@@ -128,7 +128,22 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void GenerateEnemyNextAction()
     {
-        gameData.EnemyNextAction.Value = $"Attack: {gameData.EnemyAttack.Value} DMG";
+        // 複数の行動パターンをランダムに選択
+        int actionType = UnityEngine.Random.Range(0, 3);
+        
+        switch (actionType)
+        {
+            case 0: // 通常攻撃
+                gameData.EnemyNextAction.Value = $"Attack: {gameData.EnemyAttack.Value} DMG";
+                break;
+            case 1: // 強攻撃（1.5倍）
+                int strongAttack = Mathf.RoundToInt(gameData.EnemyAttack.Value * 1.5f);
+                gameData.EnemyNextAction.Value = $"Strong Attack: {strongAttack} DMG";
+                break;
+            case 2: // 防御破壊攻撃（防御無視）
+                gameData.EnemyNextAction.Value = $"Guard Break: {gameData.EnemyAttack.Value} DMG (Ignores defense)";
+                break;
+        }
     }
 
     /// <summary>
@@ -185,18 +200,43 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void EnemyTurn()
     {
-        int damage = gameData.EnemyAttack.Value;
+        // 敵の行動を実行文字列から解析
+        string action = gameData.EnemyNextAction.Value;
+        int damage = 0;
+        bool ignoresDefense = false;
 
-        if (isDefending)
+        if (action.Contains("Strong Attack"))
         {
-            int defensePower = CharacterStats.CalculateDefensePower(gameData.Shield.Value);
-            damage = Mathf.Max(0, damage - defensePower);
-            AddBattleLog($"{gameData.CurrentEnemy.Value} attacks! Shield blocked {defensePower}!");
-            isDefending = false;
+            // 強攻撃: 1.5倍ダメージ
+            damage = Mathf.RoundToInt(gameData.EnemyAttack.Value * 1.5f);
+            AddBattleLog($"{gameData.CurrentEnemy.Value} uses Strong Attack!");
+        }
+        else if (action.Contains("Guard Break"))
+        {
+            // 防御破壊: 通常ダメージだが防御無視
+            damage = gameData.EnemyAttack.Value;
+            ignoresDefense = true;
+            AddBattleLog($"{gameData.CurrentEnemy.Value} uses Guard Break!");
         }
         else
         {
+            // 通常攻撃
+            damage = gameData.EnemyAttack.Value;
             AddBattleLog($"{gameData.CurrentEnemy.Value} attacks!");
+        }
+
+        // 防御処理
+        if (isDefending && !ignoresDefense)
+        {
+            int defensePower = CharacterStats.CalculateDefensePower(gameData.Shield.Value);
+            damage = Mathf.Max(0, damage - defensePower);
+            AddBattleLog($"Shield blocked {defensePower} damage!");
+            isDefending = false;
+        }
+        else if (isDefending && ignoresDefense)
+        {
+            AddBattleLog("Defense was ignored!");
+            isDefending = false;
         }
 
         gameData.PlayerHP.Value -= damage;
