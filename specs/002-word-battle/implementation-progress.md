@@ -11,11 +11,11 @@
 |-------|--------|----------------|-------------|----------|
 | Phase 1 (P1) | ✅ Completed | 5 / 5 | 5 | 100% |
 | Phase 2 (P2) | 🟡 In Progress | 4 / 6 | 6 | 67% |
-| Phase 3 (P3) | ⚪ Not Started | 0 / 5 | 5 | 0% |
+| Phase 3 (P3) | ✅ Completed | 3 / 3 | 3 | 100% |
 | Phase 4 (P4) | ⚪ Not Started | 0 / 3 | 3 | 0% |
 | Phase 5 (P5) | ⚪ Not Started | 0 / 6 | 6 | 0% |
 | Final | ⚪ Not Started | 0 / 3 | 3 | 0% |
-| **Total** | **🟡 In Progress** | **9 / 28** | **28** | **32%** |
+| **Total** | **🟡 In Progress** | **12 / 28** | **28** | **43%** |
 
 ---
 
