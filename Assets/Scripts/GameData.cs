@@ -55,6 +55,22 @@ public class GameData : MonoBehaviour
         PlayerHP.Value = PlayerMaxHP.Value;
     }
 
+    /// <summary>
+    /// Phase 3: 武器に文字を追加
+    /// </summary>
+    public void AddToWeapon(char letter)
+    {
+        Weapon.Value += letter.ToString().ToUpper();
+    }
+
+    /// <summary>
+    /// Phase 3: 盾に文字を追加
+    /// </summary>
+    public void AddToShield(char letter)
+    {
+        Shield.Value += letter.ToString().ToUpper();
+    }
+
     public void Reset()
     {
         IsGameOver.Value = false;

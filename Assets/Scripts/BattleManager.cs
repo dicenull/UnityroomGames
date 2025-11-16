@@ -8,6 +8,7 @@ public class BattleManager : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject battlePanel;
+    [SerializeField] private RewardManager rewardManager;
     [SerializeField] private TMP_Text playerHPText;
     [SerializeField] private TMP_Text enemyInfoText;
     [SerializeField] private TMP_Text enemyNextActionText;
@@ -239,11 +240,21 @@ public class BattleManager : MonoBehaviour
     private void CheckVictory()
     {
         gameData.DefeatedEnemies.Value++;
-        AddBattleLog($"Defeated {gameData.CurrentEnemy.Value}!");
+        string defeatedEnemy = gameData.CurrentEnemy.Value;
+        AddBattleLog($"Defeated {defeatedEnemy}!");
 
-        // Phase 2では単純に次の敵を生成（Phase 3で報酬選択に変更）
-        int nextDifficulty = gameData.DefeatedEnemies.Value / 2;
-        StartCoroutine(SpawnNextEnemyCoroutine(nextDifficulty));
+        // Phase 3: 報酬選択画面を表示
+        if (rewardManager != null)
+        {
+            battlePanel.SetActive(false);
+            rewardManager.ShowRewardPanel(defeatedEnemy);
+        }
+        else
+        {
+            // RewardManagerがない場合は従来通り
+            int nextDifficulty = gameData.DefeatedEnemies.Value / 2;
+            StartCoroutine(SpawnNextEnemyCoroutine(nextDifficulty));
+        }
     }
 
     /// <summary>
