@@ -11,7 +11,7 @@ public class RestartButton : MonoBehaviour, IPointerClickHandler
 
     private void RestartGame()
     {
-        GameData.Instance.Reset();
+        TempGameData.Instance.Reset();
         Time.timeScale = 1f; // タイムスケールを元に戻す
         UnityEngine.SceneManagement.SceneManager.LoadScene(
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
