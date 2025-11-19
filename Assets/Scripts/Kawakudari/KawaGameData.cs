@@ -1,7 +1,6 @@
 using R3;
-using UnityEngine;
 
-public class KawaGameData : MonoBehaviour, IGameData
+public class KawaGameData : IGameData
 {
     public ReactiveProperty<bool> IsGameOver = new();
 
