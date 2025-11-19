@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
         var key = Keyboard.current;
         if (key[Key.Space].wasPressedThisFrame)
         {
-            TempGameData.Instance.IsGameOver.Value = true;
+            GetIt.Instance.Get<IGameData>().GameOver();
         }
     }
 }
