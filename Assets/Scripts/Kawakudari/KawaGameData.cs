@@ -5,7 +5,7 @@ public class KawaGameData : IGameData
     public ReactiveProperty<bool> IsGameOver = new(false);
     public ReactiveProperty<bool> IsGameStart = new(false);
 
-    public ReactiveProperty<int> TimeScore = new(0);
+    public ReactiveProperty<float> TimeScore = new(0f);
 
     Observable<bool> IGameData.IsGameOver => IsGameOver;
 
