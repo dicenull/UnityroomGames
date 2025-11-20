@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision with " + collision.gameObject.name);
+        GetIt.Instance.Get<IGameData>().GameOver();
     }
 
     void Update()
