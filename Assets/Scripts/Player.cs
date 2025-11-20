@@ -6,6 +6,11 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float Speed = 10f;
 
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision with " + collision.gameObject.name);
+    }
+
     void Update()
     {
         var key = Keyboard.current;

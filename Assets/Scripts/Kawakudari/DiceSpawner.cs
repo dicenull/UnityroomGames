@@ -14,7 +14,7 @@ public class DiceSpawner : MonoBehaviour
             var randRotate = Quaternion.Euler(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f));
             var dice = Instantiate(Resources.Load<GameObject>("dice"), randPos, randRotate);
             dice.transform.localScale = Vector3.one * 0.7f;
-            dice.AddComponent<DiceController>();
+
             Destroy(dice, 10f);
 
             timer = 0f;
