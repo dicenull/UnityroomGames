@@ -5,7 +5,17 @@ public class DiceSpawner : MonoBehaviour
     float coolDown = 0.3f;
     float timer = 0f;
 
+
     void Update()
+    {
+        var gameData = GetIt.Instance.Get<KawaGameData>();
+        if (gameData.IsGameStart.Value)
+        {
+            Spawn();
+        }
+    }
+
+    void Spawn()
     {
         timer += Time.deltaTime;
         if (timer >= coolDown)

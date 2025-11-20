@@ -33,6 +33,7 @@ public class GetIt : MonoBehaviour
     public void Register<TInterface, TImplementation>(TImplementation implementation) where TImplementation : TInterface
     {
         _services[typeof(TInterface)] = implementation;
+        _services[typeof(TImplementation)] = implementation;
         Debug.Log($"Service registered: {typeof(TInterface).Name}");
     }
 
