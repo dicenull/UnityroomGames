@@ -1,5 +1,7 @@
+using R3;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using unityroom.Api;
 
 public class PhaseManager : MonoBehaviour
 {
@@ -9,6 +11,15 @@ public class PhaseManager : MonoBehaviour
     void Start()
     {
         startPhaseObject.SetActive(true);
+
+        GetIt.Instance.Get<IGameData>().IsGameOver.Subscribe(isGameOver =>
+        {
+            if (isGameOver)
+            {
+                var score = GetIt.Instance.Get<KawaGameData>().TimeScore.Value;
+                EnvUnityroomApiClient.Instance.SendScore(1, score, ScoreboardWriteMode.Always);
+            }
+        }).AddTo(this);
     }
 
     void Update()
