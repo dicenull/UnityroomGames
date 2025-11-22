@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DiceSpawner : MonoBehaviour
 {
-    float coolDown = 0.3f;
+    float coolDown = 0.2f;
     float timer = 0f;
 
 

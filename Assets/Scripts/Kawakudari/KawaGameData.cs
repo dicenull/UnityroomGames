@@ -7,6 +7,10 @@ public class KawaGameData : IGameData
 
     public ReactiveProperty<float> TimeScore = new(0f);
 
+    public ReactiveProperty<long> FreezeScore = new(10);
+
+    public float Score => TimeScore.Value * FreezeScore.Value;
+
     Observable<bool> IGameData.IsGameOver => IsGameOver;
 
     public void GameStart()
@@ -24,5 +28,10 @@ public class KawaGameData : IGameData
         IsGameOver.Value = false;
         IsGameStart.Value = false;
         TimeScore.Value = 0;
+    }
+
+    internal void AddFreeze()
+    {
+        FreezeScore.Value += 10;
     }
 }

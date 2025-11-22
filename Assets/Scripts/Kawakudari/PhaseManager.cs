@@ -16,7 +16,7 @@ public class PhaseManager : MonoBehaviour
         {
             if (isGameOver)
             {
-                var score = GetIt.Instance.Get<KawaGameData>().TimeScore.Value;
+                var score = GetIt.Instance.Get<KawaGameData>().Score;
                 EnvUnityroomApiClient.Instance.SendScore(1, score, ScoreboardWriteMode.Always);
             }
         }).AddTo(this);
