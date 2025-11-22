@@ -20,7 +20,11 @@ public class Timer : MonoBehaviour
     }
     void Update()
     {
+
         var gameData = GetIt.Instance.Get<KawaGameData>();
-        gameData.TimeScore.Value += Time.deltaTime;
+        if (gameData.IsGameStart.Value)
+        {
+            gameData.TimeScore.Value += Time.deltaTime;
+        }
     }
 }
