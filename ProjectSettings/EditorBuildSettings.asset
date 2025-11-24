@@ -11,9 +11,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/TextTextGame.unity
     guid: 819489bec53a74864a88c7c4ae0c887c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/KawakudariGame.unity
-    guid: 93fde525a66b844358b5ba0e93f13029
+    guid: 376d570aa50734d6a87c58506cc7f563
+  - enabled: 1
+    path: Assets/Scenes/DiceControlGame.unity
+    guid: 3b8d0811098094706a257b75d350f94c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
