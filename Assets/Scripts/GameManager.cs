@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1f;
-        GameData.Instance.IsGameOver.Subscribe(isGameOver =>
+        GetIt.Instance.Get<IGameData>().IsGameOver.Subscribe(isGameOver =>
         {
             if (isGameOver)
             {
