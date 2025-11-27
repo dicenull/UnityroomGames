@@ -5,8 +5,17 @@ using UnityEngine.InputSystem;
 public class DiceControlPlayer : MonoBehaviour
 {
     [SerializeField] private float Speed = 30f;
+    new Rigidbody rigidbody;
 
-    Rigidbody rigidbody;
+    void OnCollisionEnter(Collision collision)
+    {
+        var other = collision.gameObject;
+
+        if (other.transform.parent.name == "Wall")
+        {
+            GetIt.Instance.Get<IGameData>().GameOver();
+        }
+    }
 
     void Awake()
     {
