@@ -18,6 +18,15 @@ public class DiceControlPlayer : MonoBehaviour
             GetIt.Instance.Get<IGameData>().GameOver();
         }
     }
+    void OnTriggerEnter(Collider other)
+    {
+        Destroy(other.gameObject);
+
+        // ランダムな移動回数を回復
+        var gameData = GetIt.Instance.Get<DiceControlGameData>();
+        var rand = Random.Range(1, 7);
+        gameData.AddDiceCount(rand);
+    }
 
     void Awake()
     {

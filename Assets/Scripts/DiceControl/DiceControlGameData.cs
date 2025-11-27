@@ -1,3 +1,4 @@
+using System;
 using R3;
 
 public class DiceControlGameData : IGameData
@@ -21,5 +22,30 @@ public class DiceControlGameData : IGameData
     public void Reset()
     {
         IsGameOver.Value = false;
+    }
+
+    public void AddDiceCount(int index)
+    {
+        switch (index)
+        {
+            case 1:
+                DiceCountOne.Value += 1;
+                break;
+            case 2:
+                DiceCountTwo.Value += 1;
+                break;
+            case 3:
+                DiceCountThree.Value += 1;
+                break;
+            case 4:
+                DiceCountFour.Value += 1;
+                break;
+            case 5:
+                DiceCountFive.Value += 1;
+                break;
+            case 6:
+                DiceCountSix.Value += 1;
+                break;
+        }
     }
 }
