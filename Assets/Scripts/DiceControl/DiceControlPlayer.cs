@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,18 +29,24 @@ public class DiceControlPlayer : MonoBehaviour
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
 
-        var keys = new Key[] { Key.A, Key.D, Key.W, Key.S };
-        var angles = new float[] { -90, 90, 0, 180 };
-        for (int i = 0; i < keys.Length; i++)
+        // サイコロの面に対応するキー入力で移動
+        // 1の面が前
+        var key2Angle = new Dictionary<Key, Quaternion> { { Key.Digit1, Quaternion.identity },
+                                                                 { Key.Digit2, Quaternion.Euler(90, 0, 0) },
+                                                                 { Key.Digit3, Quaternion.Euler(0, -90, 0) },
+                                                                 { Key.Digit4, Quaternion.Euler(0, 90,0) },
+                                                                 { Key.Digit5, Quaternion.Euler(-90, 0, 0) },
+                                                                 { Key.Digit6, Quaternion.Euler(0,180, 0) } };
+
+        foreach (var kvp in key2Angle)
         {
-            if (keyboard[keys[i]].wasPressedThisFrame)
+            if (keyboard[kvp.Key].wasPressedThisFrame)
             {
-                var angle = angles[i];
-                var direction = Quaternion.Euler(0, angle, 0) * transform.forward;
+                var direction = kvp.Value * transform.forward;
                 Move(direction);
+                break;
             }
         }
-
 
     }
 
