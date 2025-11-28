@@ -7,6 +7,9 @@ public class DiceControlSpawner : MonoBehaviour
 
     void Update()
     {
+        var gameData = GetIt.Instance.Get<DiceControlGameData>();
+        if (!gameData.IsGameStart.Value || gameData.IsGameOver.Value) return;
+
         timer += Time.deltaTime;
         if (timer >= coolDown)
         {

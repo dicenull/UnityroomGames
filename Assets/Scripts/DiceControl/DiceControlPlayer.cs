@@ -78,6 +78,12 @@ public class DiceControlPlayer : MonoBehaviour
 
     void Move(Vector3 direction)
     {
+        var gameData = GetIt.Instance.Get<DiceControlGameData>();
+        if (!gameData.IsGameStart.Value && !gameData.IsGameOver.Value)
+        {
+            gameData.IsGameStart.Value = true;
+        }
+
         rigidbody.linearVelocity = Vector3.zero;
         rigidbody.AddForce(direction * Speed, ForceMode.VelocityChange);
     }

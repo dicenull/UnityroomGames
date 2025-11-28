@@ -1,9 +1,10 @@
-using System;
 using R3;
 
 public class DiceControlGameData : IGameData
 {
     public ReactiveProperty<bool> IsGameOver = new(false);
+    public ReactiveProperty<bool> IsGameStart = new(false);
+    public ReactiveProperty<float> TimeScore = new(0f);
     public ReactiveProperty<int> DiceCountOne = new(5);
     public ReactiveProperty<int> DiceCountTwo = new(5);
     public ReactiveProperty<int> DiceCountThree = new(5);
@@ -12,7 +13,6 @@ public class DiceControlGameData : IGameData
     public ReactiveProperty<int> DiceCountSix = new(5);
 
     Observable<bool> IGameData.IsGameOver => IsGameOver;
-
 
     public void GameOver()
     {
