@@ -14,8 +14,7 @@ public class DiceControlSpawner : MonoBehaviour
         if (timer >= coolDown)
         {
             var randPos = new Vector3(Random.Range(-20f, 20f), Random.Range(-20f, 20f), Random.Range(-20f, 20f));
-            var dice = Instantiate(Resources.Load<GameObject>("Ball"), randPos, Quaternion.identity);
-            Destroy(dice, 20f);
+            Instantiate(Resources.Load<GameObject>("Ball"), randPos, Quaternion.identity);
 
             timer = 0f;
         }
