@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class ChargeGameDataRegister : MonoBehaviour
 {
-
-    void Start()
+    void Awake()
     {
         GetIt.Instance.Register<IGameData, ChargeGameData>(new ChargeGameData());
     }

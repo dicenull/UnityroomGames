@@ -3,7 +3,8 @@ using R3;
 
 public class ChargeGameData : IGameData
 {
-    public ReactiveProperty<bool> IsGameOver { get; } = new ReactiveProperty<bool>(false);
+    public ReactiveProperty<bool> IsGameOver = new(false);
+    public ReactiveProperty<ChargeHands> CurrentHand = new(ChargeHands.Charge);
     Observable<bool> IGameData.IsGameOver => IsGameOver;
 
     public void GameOver()
