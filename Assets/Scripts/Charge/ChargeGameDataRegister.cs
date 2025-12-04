@@ -6,5 +6,4 @@ public class ChargeGameDataRegister : MonoBehaviour
     {
         GetIt.Instance.Register<IGameData, ChargeGameData>(new ChargeGameData());
     }
-
 }
