@@ -7,6 +7,7 @@ public class ChargeHandClicker : MonoBehaviour, IPointerClickHandler
     {
         Debug.Log($"Clicked on {gameObject.name}");
         var data = GetIt.Instance.Get<ChargeGameData>();
-        data.CurrentHand.Value = ChargeHandsExtend.ToChargeHands(gameObject.name);
+        var hand = ChargeHandsExtend.ToChargeHands(gameObject.name);
+        data.JudgeByHand(hand);
     }
 }
