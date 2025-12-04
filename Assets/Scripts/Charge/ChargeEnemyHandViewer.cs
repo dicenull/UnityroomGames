@@ -8,6 +8,8 @@ public class ChargeEnemyHandViewer : MonoBehaviour
     void Awake()
     {
         image = transform.GetComponent<Image>();
+
+        transform.Rotate(0, 0, 180);
     }
 
     void Start()
@@ -17,7 +19,6 @@ public class ChargeEnemyHandViewer : MonoBehaviour
         {
             if (hand == null)
             {
-                image.sprite = null;
                 return;
             }
 

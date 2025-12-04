@@ -17,7 +17,6 @@ public class ChargeHandViewer : MonoBehaviour
         {
             if (hand == null)
             {
-                image.sprite = null;
                 return;
             }
 

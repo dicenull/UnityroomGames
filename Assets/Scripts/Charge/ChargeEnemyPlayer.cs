@@ -1,5 +1,6 @@
 
 using System;
+using System.Linq;
 using R3;
 using UnityEngine;
 
@@ -14,10 +15,13 @@ public class ChargeEnemyPlayer : MonoBehaviour
             {
                 return;
             }
-            var hands = Enum.GetValues(typeof(ChargeHands));
-            var length = hands.Length;
+
+            // チャージが足りない場合はビームを出せないようにする
+            var hands = Enum.GetValues(typeof(ChargeHands))
+                .Cast<ChargeHands>().Where(h => data.EnemyCharge.Value > 0 || h != ChargeHands.Beam).ToList();
+            var length = hands.Count;
             var randomIndex = UnityEngine.Random.Range(0, length);
-            var randomHand = (ChargeHands)hands.GetValue(randomIndex);
+            var randomHand = hands[randomIndex];
 
             data.SetEnemyHand(randomHand);
         }).AddTo(this);

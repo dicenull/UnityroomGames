@@ -6,6 +6,7 @@ public class ChargeJudge : MonoBehaviour
     void Start()
     {
         var data = GetIt.Instance.Get<ChargeGameData>();
+
         // CurrentHandかEnemyHandが変化したら勝敗を判定してログに出す
         Observable.Merge(data.CurrentHand, data.EnemyHand).Subscribe(_ =>
         {
@@ -21,8 +22,8 @@ public class ChargeJudge : MonoBehaviour
             Debug.Log($"PlayerHand: {playerHand}, EnemyHand: {enemyHand}, PlayerCharge: {pCharge}, EnemyCharge: {eCharge}");
             var result = JudgeManager.Judge(playerHand.Value, pCharge, enemyHand.Value, eCharge);
 
-            Debug.Log($"{result}");
-
+            Debug.Log($"Judge Result: {result}");
+            data.NextTurn(result);
         }).AddTo(this);
     }
 }
@@ -35,19 +36,23 @@ static class JudgeManager
         var isPlayerInValidBeam = player == ChargeHands.Beam && playerCharge <= 0;
         if (isPlayerInValidBeam)
         {
+            Debug.Log("プレイヤーがチャージ不足");
             return JudgeResult.Lose;
         }
         var isEnemyInValidBeam = enemy == ChargeHands.Beam && enemyCharge <= 0;
         if (isEnemyInValidBeam)
         {
+            Debug.Log("敵がチャージ不足");
             return JudgeResult.Win;
         }
         if (player == ChargeHands.Charge && enemy == ChargeHands.Beam)
         {
+            Debug.Log("敵のビームがヒット");
             return JudgeResult.Lose;
         }
         if (player == ChargeHands.Beam && enemy == ChargeHands.Charge)
         {
+            Debug.Log("プレイヤーのビームがヒット");
             return JudgeResult.Win;
         }
 
