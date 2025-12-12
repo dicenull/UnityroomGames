@@ -10,5 +10,5 @@
     ".specify/scripts/bash/": true,
     ".specify/scripts/powershell/": true
   },
-  "cSpell.words": ["Kawa", "Kawakudari"]
+  "cSpell.words": ["Kawa", "Kawakudari", "rigidbody"]
 }

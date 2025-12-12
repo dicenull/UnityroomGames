@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class InvDiceController : MonoBehaviour
@@ -6,12 +5,29 @@ public class InvDiceController : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         var gameData = GetIt.Instance.Get<InvGameData>();
-        var nextPhase = other.name switch
+        InvPhase? nextPhase = other.name switch
         {
             "RightBar" => InvPhase.Left,
             "LeftBar" => InvPhase.Right,
-            _ => throw new Exception("Invalid Name")
+            _ => null
         };
-        gameData.Hit(nextPhase);
+        if (nextPhase == null)
+        {
+            CheckBullet(other.gameObject);
+            return;
+        }
+
+        gameData.Hit(nextPhase.Value);
+    }
+
+    void CheckBullet(GameObject other)
+    {
+        if (!other.name.Contains("InvBullet"))
+        {
+            return;
+        }
+
+        Destroy(other);
+        Destroy(gameObject);
     }
 }
