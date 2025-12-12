@@ -10,10 +10,7 @@ public class GetIt : MonoBehaviour
 
     GetIt()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        if (Instance == null) Instance = this;
     }
 
     void Awake()
