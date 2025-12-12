@@ -11,7 +11,7 @@ public class InvPlayer : MonoBehaviour
 
     void Update()
     {
-        var gameData = GetIt.Instance.Get<IGameData>();
+        var gameData = GetIt.Instance.Get<InvGameData>();
         var keyboard = Keyboard.current;
 
         var amount = new Vector3(.1f, 0, 0);
@@ -24,7 +24,7 @@ public class InvPlayer : MonoBehaviour
             transform.position += amount;
         }
 
-        if (canSingleShot && keyboard[Key.Space].wasPressedThisFrame)
+        if (canSingleShot && keyboard[Key.Space].isPressed)
         {
             canSingleShot = false;
 
@@ -35,10 +35,12 @@ public class InvPlayer : MonoBehaviour
             rigidbody.useGravity = false;
             rigidbody.AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
 
-            shot.OnDestroyAsObservable().Subscribe(_ =>
-            {
-                canSingleShot = true;
-            }).AddTo(this);
+            Invoke("ResetCoolDown", gameData.ShotCoolDown.Value);
         }
+    }
+
+    public void ResetCoolDown()
+    {
+        canSingleShot = true;
     }
 }

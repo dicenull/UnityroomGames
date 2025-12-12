@@ -1,6 +1,7 @@
 
 using System;
 using R3;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum InvPhase
@@ -17,6 +18,8 @@ public class InvGameData : IGameData
     public ReactiveProperty<InvPhase> MovePhase = new(InvPhase.Right);
     BehaviorSubject<InvPhase> _hit = new(InvPhase.Right);
 
+    public ReactiveProperty<float> ShotCoolDown = new(2f);
+
     public Observable<InvPhase> OnHit => _hit.AsObservable();
 
     public Vector3 MoveAmount => MovePhase.Value switch
@@ -26,6 +29,12 @@ public class InvGameData : IGameData
         _ => throw new Exception("Invalid Phase")
     };
 
+    public InvGameData()
+    {
+        var prevCoolDown = PlayerPrefs.GetFloat("CoolDown", 2f);
+        ShotCoolDown.Value = prevCoolDown;
+    }
+
     public void GameOver()
     {
         IsGameOver.Value = true;
@@ -33,7 +42,11 @@ public class InvGameData : IGameData
 
     public void Reset()
     {
+        ShotCoolDown.Value -= .3f;
+        PlayerPrefs.SetFloat("CoolDown", ShotCoolDown.Value);
+
         IsGameOver.Value = false;
+        Debug.Log(ShotCoolDown.Value);
     }
 
     public void Hit(InvPhase phase)

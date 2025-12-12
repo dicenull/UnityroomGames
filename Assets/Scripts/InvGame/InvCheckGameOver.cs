@@ -12,9 +12,11 @@ public class InvCheckGameOver : MonoBehaviour
 
         if (count == 0)
         {
-            Debug.Log("GameOver");
             var gameData = GetIt.Instance.Get<InvGameData>();
-            gameData.GameOver();
+            if (!gameData.IsGameOver.Value)
+            {
+                gameData.GameOver();
+            }
         }
     }
 

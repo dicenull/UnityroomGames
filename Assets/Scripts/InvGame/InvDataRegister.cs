@@ -7,4 +7,9 @@ public class InvDataRegister : MonoBehaviour
         GetIt.Instance.Register<IGameData, InvGameData>(new InvGameData());
     }
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void Init()
+    {
+        PlayerPrefs.DeleteKey("CoolDown");
+    }
 }
