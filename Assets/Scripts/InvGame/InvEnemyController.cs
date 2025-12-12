@@ -7,12 +7,16 @@ public class InvEnemyController : MonoBehaviour
     float timer = 0f;
     float coolDown = .3f;
 
+
     void Start()
     {
         var gameData = GetIt.Instance.Get<InvGameData>();
         gameData.OnHit.ThrottleFirst(System.TimeSpan.FromSeconds(coolDown)).Subscribe(nextPhase =>
         {
             gameData.MovePhase.Value = nextPhase;
+            // 一段下に移動
+            transform.position += new Vector3(0, -.3f, 0);
+            timer = 0f;
         }).AddTo(this);
     }
 
